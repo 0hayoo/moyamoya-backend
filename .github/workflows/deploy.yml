@@ -1,0 +1,71 @@
+name: CD
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'moyamoya-backend/**'
+    branches: [ "main" ]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setting yaml file
+        # TODO: microsoft/variable-substitution is deprecated
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: src/main/resources/application.yml
+        env:
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+      - name: Build with Gradle
+        run: |
+          ./gradlew bootJar -x test
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: moyamoya
+          path: ./build/libs/moyamoya-0.0.1-SNAPSHOT.jar
+  distribute:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: moyamoya
+          path: dist
+      - name: Show downloaded files
+        run: ls -alh dist
+      - name: EC2 Upload
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_SSH_HOST }}
+          username: ${{ secrets.REMOTE_SSH_USERNAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          source: "dist/*.jar"
+          target: /home/ubuntu/product
+          strip_components: 1 # Remove dist path
+  service_restart:
+    needs: distribute
+    runs-on: ubuntu-latest
+    steps:
+      - name: EC2 Run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_SSH_HOST }}
+          username: ${{ secrets.REMOTE_SSH_USERNAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            cd /home/ubuntu/product
+            sh start.sh

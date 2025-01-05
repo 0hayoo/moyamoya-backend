@@ -49,3 +49,17 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+
+tasks.apply {
+    bootJar {
+        // 실행 가능한 JAR 생성 설정
+        // XX.jar
+        enabled = true
+    }
+    jar {
+        // 일반 JAR 파일 생성 비활성화
+        // XXplain.jar
+        enabled = false
+    }
+}
