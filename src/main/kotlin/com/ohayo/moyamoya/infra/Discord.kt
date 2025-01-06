@@ -50,7 +50,6 @@ class DiscordErrorSendService(
                 )
             )
         )
-
     }
 
     private fun createRequestFullPath(webRequest: WebRequest): String {
