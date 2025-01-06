@@ -17,5 +17,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 server:
   port: 1234
+discord:
+  webhook-url: ${DISCORD_WEBHOOK_URL}
 #jwt:
 #  secret-key: ${JWT_SECRET}
