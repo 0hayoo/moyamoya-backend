@@ -1,6 +1,8 @@
 package com.ohayo.moyamoya.global
 
+import com.ohayo.moyamoya.infra.DiscordErrorSendService
 import mu.KLogger
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -16,7 +18,9 @@ class CustomException(
 
 @RestControllerAdvice
 class CustomExceptionHandler(
-    private val logger: KLogger
+    private val logger: KLogger,
+    private val environment: Environment,
+    private val discordErrorSendService: DiscordErrorSendService
 ) {
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(exception: CustomException): ResponseEntity<ErrorRes> {
@@ -48,6 +52,11 @@ class CustomExceptionHandler(
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception, webRequest: WebRequest): ResponseEntity<ErrorRes> {
         logger.error("CustomExceptionHandler.Exception", exception)
+        
+        if (environment.activeProfiles.contains("prd")) {
+            discordErrorSendService.sendDiscordAlarm(exception, webRequest)
+        }
+        
         return createErrorResponse(
             status = HttpStatus.INTERNAL_SERVER_ERROR,
             message = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
@@ -58,6 +67,7 @@ class CustomExceptionHandler(
         status: HttpStatus,
         message: String,
     ) = ResponseEntity.status(status).body(
+        
         ErrorRes(
             status = status.value(),
             message = message

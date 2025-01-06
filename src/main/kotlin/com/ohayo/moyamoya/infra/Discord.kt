@@ -31,7 +31,7 @@ class DiscordErrorSendService(
             .retrieve()
     }
 
-    fun createMessage(e: Exception, request: WebRequest): DiscordMessage {
+    private fun createMessage(e: Exception, request: WebRequest): DiscordMessage {
         return DiscordMessage(
             content = "# \uD83D\uDEA8 에러 발생",
             embeds = listOf(
@@ -53,7 +53,7 @@ class DiscordErrorSendService(
 
     }
 
-    fun createRequestFullPath(webRequest: WebRequest): String {
+    private fun createRequestFullPath(webRequest: WebRequest): String {
         val request = (webRequest as ServletWebRequest).request
         var fullPath = "${request.method} ${request.requestURL}"
 
@@ -65,7 +65,7 @@ class DiscordErrorSendService(
         return fullPath
     }
 
-    fun getStackTrace(e: Exception): String = StringWriter().apply {
+    private fun getStackTrace(e: Exception): String = StringWriter().apply {
         e.printStackTrace(PrintWriter(this))
     }.toString()
 }

@@ -2,16 +2,21 @@ package com.ohayo.moyamoya.global
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.DefaultSecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val httpExceptionFilter: HttpExceptionFilter,
+    private val sender: ErrorResponseSender
+) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain = http
         .cors { corsConfigurationSource() }
@@ -27,10 +32,11 @@ class SecurityConfig {
             ).permitAll()
                 .anyRequest().authenticated()
         }
-//        .exceptionHandling {
-//            it.authenticationEntryPoint { _, response, _ -> sender.send(response, HttpStatus.UNAUTHORIZED) }
-//            it.accessDeniedHandler { _, response, _ -> sender.send(response, HttpStatus.FORBIDDEN) }
-//        }
+        .addFilterBefore(httpExceptionFilter, UsernamePasswordAuthenticationFilter::class.java)
+        .exceptionHandling {
+            it.authenticationEntryPoint { _, response, _ -> sender.send(response, HttpStatus.UNAUTHORIZED) }
+            it.accessDeniedHandler { _, response, _ -> sender.send(response, HttpStatus.FORBIDDEN) }
+        }
         .build()
 
     @Bean
