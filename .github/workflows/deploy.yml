@@ -1,9 +1,6 @@
 name: CD
 on:
   push:
-    paths:
-      - '.github/workflows/**'
-      - 'moyamoya-backend/**'
     branches: [ "main" ]
 permissions:
   contents: read
