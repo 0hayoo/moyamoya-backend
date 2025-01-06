@@ -3,6 +3,7 @@ package com.ohayo.moyamoya.infra
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import java.io.PrintWriter
@@ -29,6 +30,7 @@ class DiscordErrorSendService(
         restClient.post()
             .body(createMessage(e, request))
             .retrieve()
+            .body<Any>()
     }
 
     private fun createMessage(e: Exception, request: WebRequest): DiscordMessage {

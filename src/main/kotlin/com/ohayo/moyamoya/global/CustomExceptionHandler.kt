@@ -52,11 +52,11 @@ class CustomExceptionHandler(
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception, webRequest: WebRequest): ResponseEntity<ErrorRes> {
         logger.error("CustomExceptionHandler.Exception", exception)
-        
+
         if (environment.activeProfiles.contains("prd")) {
             discordErrorSendService.sendDiscordAlarm(exception, webRequest)
         }
-        
+
         return createErrorResponse(
             status = HttpStatus.INTERNAL_SERVER_ERROR,
             message = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
@@ -67,7 +67,7 @@ class CustomExceptionHandler(
         status: HttpStatus,
         message: String,
     ) = ResponseEntity.status(status).body(
-        
+
         ErrorRes(
             status = status.value(),
             message = message
