@@ -28,6 +28,7 @@ class SecurityConfig(
         .authorizeHttpRequests {
             it.requestMatchers(
                 "auth/refresh",
+                "schools",
                 "test/**"
             ).permitAll()
                 .anyRequest().authenticated()
