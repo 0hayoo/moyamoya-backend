@@ -15,6 +15,12 @@ class GlobalConfig(
     fun discordRestClient() = RestClient.builder()
         .baseUrl(discordProperties.webhookUrl)
         .build()
+    
+    @Bean
+    @Qualifier("neis")
+    fun neisRestClient() = RestClient.builder()
+        .baseUrl("https://open.neis.go.kr")
+        .build()
 
     @Bean
     fun logger() = KotlinLogging.logger { }

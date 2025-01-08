@@ -7,3 +7,8 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding
 class DiscordProperties @ConstructorBinding constructor(
     val webhookUrl: String
 )
+
+@ConfigurationProperties("neis")
+class NeisProperties @ConstructorBinding constructor(
+    val apiKey: String
+)
