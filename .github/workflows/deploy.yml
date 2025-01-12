@@ -29,6 +29,12 @@ jobs:
           coolsms.api-secret: ${{ secrets.COOL_SMS_API_SECRET }}
           coolsms.sender-phone: ${{ secrets.COOL_SMS_SENDER_PHONE }}
           spring.profiles.active: 'prd'
+      - name: Setting firebase
+        run: |
+          mkdir -p ./src/main/resources
+          
+          touch ./src/main/resources/moyamoya-firebase.json
+          echo -e "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" > ./src/main/resources/moyamoya-firebase.json
       - name: Build with Gradle
         run: |
           ./gradlew bootJar -x test
