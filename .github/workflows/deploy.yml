@@ -25,6 +25,9 @@ jobs:
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
           neis.api-key: ${{ secrets.NEIS_API_KEY }}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY }}
+          coolsms.api-key: ${{ secrets.COOL_SMS_API_KEY }}
+          coolsms.api-secret: ${{ secrets.COOL_SMS_API_SECRET }}
+          coolsms.sender-phone: ${{ secrets.COOL_SMS_SENDER_PHONE }}
           spring.profiles.active: 'prd'
       - name: Build with Gradle
         run: |

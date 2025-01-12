@@ -18,8 +18,14 @@ class UserApi(
     fun signUp(req: SignUpRequest) = userService.signUp(req)
 
     @GetMapping("exists")
-    fun exists(@RequestParam tel: String) = userService.exists(tel)
+    fun exists(@RequestParam phone: String) = userService.exists(phone)
     
     @PostMapping("refresh")
     fun refresh(@RequestBody req: RefreshReq) = userService.refresh(req)
+    
+    @PostMapping("authorization-code")
+    fun sendAuthorizationCode(@RequestParam phone: String) = userService.sendAuthorizationCode(phone)
+    
+    @PostMapping("authorize-code")
+    fun authorizeCode(@RequestParam phone: String, @RequestParam code: String) = userService.authorizeCode(phone, code)
 }

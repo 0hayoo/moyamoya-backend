@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<UserEntity, Int> {
-    fun existsByTel(tel: String): Boolean
+    fun existsByPhone(phone: String): Boolean
 
-    fun findByTel(tel: String): UserEntity?
+    fun findByPhone(phone: String): UserEntity?
 }
 
-fun UserRepository.findByTelSafety(tel: String) =
-    findByTel(tel) ?: throw CustomException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다")
+fun UserRepository.findByPhoneSafety(phone: String) =
+    findByPhone(phone) ?: throw CustomException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다")

@@ -22,6 +22,7 @@ repositories {
 dependencies {
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("net.nurigo:javaSDK:2.2")
     
     // JWT
     val jwtVersion = "0.12.5"

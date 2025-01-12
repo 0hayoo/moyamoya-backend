@@ -54,7 +54,7 @@ class JwtClient(
     private fun createToken(user: UserEntity, tokenExpired: Long) =
         Jwts.builder()
             .claim(JwtPayloadKey.ID.key, user.id)
-            .claim(JwtPayloadKey.TEL.key, user.tel)
+            .claim(JwtPayloadKey.PHONE.key, user.phone)
             .claim(JwtPayloadKey.ROLE.key, user.userRole)
             .issuedAt(Date())
             .expiration(Date(Date().time + tokenExpired))

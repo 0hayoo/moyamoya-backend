@@ -3,7 +3,7 @@ package com.ohayo.moyamoya.api.user.value
 import com.ohayo.moyamoya.core.Gender
 
 data class SignUpRequest(
-    val tel: String,
+    val phone: String,
     val schoolId: Int,
     val schoolGrade: Int,
     val schoolClass: Int,

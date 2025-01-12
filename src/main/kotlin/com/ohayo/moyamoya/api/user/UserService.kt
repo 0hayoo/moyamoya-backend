@@ -5,6 +5,7 @@ import com.ohayo.moyamoya.api.user.value.SignUpRequest
 import com.ohayo.moyamoya.core.*
 import com.ohayo.moyamoya.core.extension.findByIdSafety
 import com.ohayo.moyamoya.global.CustomException
+import com.ohayo.moyamoya.infra.sms.SmsClient
 import com.ohayo.moyamoya.infra.token.JwtClient
 import com.ohayo.moyamoya.infra.token.JwtPayloadKey
 import com.ohayo.moyamoya.infra.token.Token
@@ -16,15 +17,17 @@ class UserService(
     private val userRepository: UserRepository,
     private val schoolRepository: SchoolRepository,
     private val jwtClient: JwtClient,
+    private val smsClient: SmsClient,
+    private val phoneCodeRepository: PhoneCodeRepository
 ) {
     fun signUp(req: SignUpRequest): Token {
-        if (userRepository.existsByTel(req.tel)) throw CustomException(HttpStatus.BAD_REQUEST, "이미 가입된 계정")
+        if (userRepository.existsByPhone(req.phone)) throw CustomException(HttpStatus.BAD_REQUEST, "이미 가입된 계정")
         
         val school = schoolRepository.findByIdSafety(req.schoolId)
 
-        userRepository.save(
+        val user = userRepository.save(
             UserEntity(
-                tel = req.tel,
+                phone = req.phone,
                 school = school,
                 schoolGrade = req.schoolGrade,
                 schoolClass = req.schoolClass,
@@ -34,23 +37,42 @@ class UserService(
                 profileImageUrl = req.profileImageUrl,
             )
         )
-
-        // TODO: JWT
-        return Token(
-            "", ""
+        
+        return jwtClient.generate(user)
+    }
+    
+    fun sendAuthorizationCode(phone: String) {
+        val code = smsClient.sendAuthorizationCode(phone)
+        phoneCodeRepository.save(
+            PhoneCodeEntity(
+                phone = phone,
+                code = code
+            )
         )
     }
+    
+    fun authorizeCode(phone: String, code: String) {
+        val codes = phoneCodeRepository.findByIsActive(phone = phone, code = code)
+        if (codes.isEmpty()) {
+            throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
+        }
+        
+        val disabledCodes = codes.map {
+            it.disable()
+            it
+        }
+        
+        phoneCodeRepository.saveAll(disabledCodes)
+    }
 
-    fun exists(tel: String) = userRepository.existsByTel(tel)
-
-
-
+    fun exists(phone: String) = userRepository.existsByPhone(phone)
+    
     fun refresh(req: RefreshReq): Token {
         jwtClient.parseToken(req.refreshToken)
 
         val user = run {
-            val tel = jwtClient.payload(JwtPayloadKey.TEL, req.refreshToken)
-            userRepository.findByTelSafety(tel)
+            val phone = jwtClient.payload(JwtPayloadKey.PHONE, req.refreshToken)
+            userRepository.findByPhoneSafety(phone)
         }
 
         return jwtClient.generate(user)

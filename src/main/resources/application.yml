@@ -26,8 +26,12 @@ jwt:
   expired:
     access: 3_600_000 # 1h
     refresh: 7_884_000_000 # 2M
-#springdoc:
-#  swagger-ui:
-#    groups-order: DESC # path, query, body, response 순으로 출력
-#    tags-sorter: alpha # 태그를 알파벳 순으로 정렬
-#    operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
+coolsms:
+  api-key: ${COOL_SMS_API_KEY}
+  api-secret: ${COOL_SMS_API_SECRET}
+  sender-phone: ${COOL_SMS_SENDER_PHONE}
+springdoc:
+  swagger-ui:
+    groups-order: DESC # path, query, body, response 순으로 출력
+    tags-sorter: alpha # 태그를 알파벳 순으로 정렬
+    operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능

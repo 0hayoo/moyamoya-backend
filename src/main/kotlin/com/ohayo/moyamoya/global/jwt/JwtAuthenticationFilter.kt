@@ -32,8 +32,8 @@ class JwtAuthenticationFilter(
     }
     
     private fun setAuthentication(token: String) {
-        val tel = jwtUtils.payload(JwtPayloadKey.TEL, token)
-        val details = userDetailsService.loadUserByUsername(tel)
+        val phone = jwtUtils.payload(JwtPayloadKey.PHONE, token)
+        val details = userDetailsService.loadUserByUsername(phone)
         SecurityContextHolder.getContext().authentication =
             UsernamePasswordAuthenticationToken(details, null, details.authorities)
     }
