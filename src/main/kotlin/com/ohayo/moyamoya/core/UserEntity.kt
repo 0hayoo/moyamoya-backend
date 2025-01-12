@@ -6,11 +6,33 @@ import jakarta.persistence.*
 @Table(name = "tbl_user")
 class UserEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
-    phone: String,
-    schoolName: String,
-    schoolGrade: Int,
-    name: String,
-    password: String,
-    profileImageUrl: String,
+    val id: Int = 0,
+
+    @Column(unique = true, nullable = false)
+    val tel: String,
+
+    @JoinColumn(name = "school_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    val school: SchoolEntity,
+
+    @Column(nullable = false)
+    val schoolGrade: Int,
+    
+    @Column(nullable = false)
+    val schoolClass: Int,
+    
+    @Column(nullable = false)
+    val name: String,
+    
+    @Column(nullable = false)
+    val gender: Gender,
+    
+    @Column(nullable = false)
+    val password: String,
+    
+    @Column(nullable = false)
+    val profileImageUrl: String,
+    
+    @Column(nullable = false)
+    val userRole: UserRole = UserRole.NORMAL
 )

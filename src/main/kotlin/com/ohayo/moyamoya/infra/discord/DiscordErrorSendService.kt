@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.infra
+package com.ohayo.moyamoya.infra.discord
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
@@ -9,17 +9,6 @@ import org.springframework.web.context.request.WebRequest
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.LocalDateTime
-
-
-data class DiscordMessage(
-    val content: String = "",
-    val embeds: List<Embed> = emptyList(),
-)
-
-data class Embed(
-    val title: String = "",
-    val description: String = "",
-)
 
 @Service
 class DiscordErrorSendService(

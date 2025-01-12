@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya
+package com.ohayo.moyamoya.api
 
 import mu.KLogger
 import org.springframework.web.bind.annotation.GetMapping

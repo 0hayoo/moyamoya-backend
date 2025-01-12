@@ -1,5 +1,6 @@
 package com.ohayo.moyamoya.global
 
+import com.ohayo.moyamoya.infra.discord.DiscordProperties
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
@@ -15,7 +16,7 @@ class GlobalConfig(
     fun discordRestClient() = RestClient.builder()
         .baseUrl(discordProperties.webhookUrl)
         .build()
-    
+
     @Bean
     @Qualifier("neis")
     fun neisRestClient() = RestClient.builder()

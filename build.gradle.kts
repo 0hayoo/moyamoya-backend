@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.4.1"
+    id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
 }
@@ -20,6 +20,15 @@ repositories {
 }
 
 dependencies {
+    // Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    
+    // JWT
+    val jwtVersion = "0.12.5"
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
+    
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

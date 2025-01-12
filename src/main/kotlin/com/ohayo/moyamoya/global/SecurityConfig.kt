@@ -4,12 +4,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 @Configuration
 @EnableWebSecurity
@@ -22,14 +25,19 @@ class SecurityConfig(
         .cors { corsConfigurationSource() }
         .csrf { it.disable() }
         .formLogin { it.disable() }
-        .sessionManagement { session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        }
+        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
             it.requestMatchers(
+                // Features
                 "auth/refresh",
                 "schools",
-                "test/**"
+
+                // ETC
+                "test/**",
+                // Swagger
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                "/v3/api-docs/**",
             ).permitAll()
                 .anyRequest().authenticated()
         }
@@ -48,5 +56,11 @@ class SecurityConfig(
             addAllowedMethod(CorsConfiguration.ALL)         // Allows any HTTP method
             allowCredentials = true                         // Allows cookies and credentials
         })
+    }
+
+    @Bean
+    fun securityCustomizer() = WebSecurityCustomizer { web: WebSecurity ->
+        web.ignoring()
+            .requestMatchers("swagger-ui/**", "swagger-ui**", "/v3/api-docs/**", "/v3/api-docs**")
     }
 }

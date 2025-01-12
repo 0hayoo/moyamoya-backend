@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.api
+package com.ohayo.moyamoya.api.school
 
 import com.ohayo.moyamoya.core.SchoolEntity
 import com.ohayo.moyamoya.core.SchoolRepository
