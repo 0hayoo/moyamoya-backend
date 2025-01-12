@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    api("com.google.firebase:firebase-admin:9.3.0")
+    
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("net.nurigo:javaSDK:2.2")
