@@ -34,7 +34,7 @@ jobs:
           mkdir -p ./src/main/resources
           
           touch ./src/main/resources/moyamoya-firebase.json
-          echo -e "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" > ./src/main/resources/moyamoya-firebase.json
+          echo "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" | base64 -d -i - > ./src/main/resources/moyamoya-firebase.json
       - name: Build with Gradle
         run: |
           ./gradlew bootJar -x test
