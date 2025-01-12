@@ -1,5 +1,7 @@
 package com.ohayo.moyamoya.global
 
+import com.ohayo.moyamoya.global.jwt.JwtAuthenticationFilter
+import com.ohayo.moyamoya.global.jwt.JwtExceptionFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
@@ -17,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val jwtExceptionFilter: JwtExceptionFilter,
     private val httpExceptionFilter: HttpExceptionFilter,
     private val sender: ErrorResponseSender
 ) {
@@ -41,7 +45,9 @@ class SecurityConfig(
             ).permitAll()
                 .anyRequest().authenticated()
         }
-        .addFilterBefore(httpExceptionFilter, UsernamePasswordAuthenticationFilter::class.java)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter::class.java)
+        .addFilterBefore(httpExceptionFilter, JwtExceptionFilter::class.java)
         .exceptionHandling {
             it.authenticationEntryPoint { _, response, _ -> sender.send(response, HttpStatus.UNAUTHORIZED) }
             it.accessDeniedHandler { _, response, _ -> sender.send(response, HttpStatus.FORBIDDEN) }

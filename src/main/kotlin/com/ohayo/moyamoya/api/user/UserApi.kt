@@ -1,8 +1,10 @@
 package com.ohayo.moyamoya.api.user
 
+import com.ohayo.moyamoya.api.user.value.RefreshReq
 import com.ohayo.moyamoya.api.user.value.SignUpRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -17,4 +19,7 @@ class UserApi(
 
     @GetMapping("exists")
     fun exists(@RequestParam tel: String) = userService.exists(tel)
+    
+    @PostMapping("refresh")
+    fun refresh(@RequestBody req: RefreshReq) = userService.refresh(req)
 }
