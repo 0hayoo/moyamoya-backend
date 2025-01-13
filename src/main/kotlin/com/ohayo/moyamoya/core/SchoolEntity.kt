@@ -6,10 +6,6 @@ import java.time.LocalDate
 @Entity
 @Table(name = "tbl_school")
 class SchoolEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
-
     @Column(nullable = false)
     val name: String,
 
@@ -25,11 +21,11 @@ class SchoolEntity(
 
     @Column(nullable = false)
     val phone: String,
-    
+
     val website: String?,
 
     @Column(nullable = false)
-    val createdAt: LocalDate,
+    val foundedAt: LocalDate,
 
     @Column(nullable = false)
     val anniversary: LocalDate,
@@ -39,4 +35,4 @@ class SchoolEntity(
 
     @Column(nullable = false)
     val officeCode: String,
-)
+): BaseEntity()

@@ -5,9 +5,6 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "tbl_user")
 class UserEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
-
     @Column(unique = true, nullable = false)
     val phone: String,
 
@@ -33,4 +30,4 @@ class UserEntity(
 
     @Column(nullable = false)
     val userRole: UserRole = UserRole.NORMAL
-)
+): BaseEntity()

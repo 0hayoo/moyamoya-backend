@@ -36,8 +36,8 @@ class SecurityConfig(
                 "/users/refresh",
                 "/users/sign-up",
                 "/users/exists",
-                "/users/authorize-code",
-                "/users/authorization-code",
+                "/users/verify-code",
+                "/users/send-code",
                 
                 "/schools",
 

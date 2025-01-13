@@ -8,7 +8,6 @@ import com.ohayo.moyamoya.core.SchoolType
 import com.ohayo.moyamoya.global.CustomException
 import mu.KLogger
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.CommandLineRunner
 import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -68,7 +67,7 @@ class NeisSchoolClient(
                 addressDetail = it.orgRdnda,
                 phone = it.orgTelno,
                 website = it.hmpgAdres,
-                createdAt = LocalDate.parse(it.fondYmd, DateTimeFormatter.ofPattern("yyyyMMdd")),
+                foundedAt = LocalDate.parse(it.fondYmd, DateTimeFormatter.ofPattern("yyyyMMdd")),
                 anniversary = LocalDate.parse(it.foasMemrd, DateTimeFormatter.ofPattern("yyyyMMdd")),
             )
         }

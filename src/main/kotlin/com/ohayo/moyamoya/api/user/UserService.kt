@@ -30,7 +30,7 @@ class UserService(
         isExists = userRepository.existsByPhone(phone)
     )
 
-    fun sendAuthorizationCode(phone: String): VoidRes {
+    fun sendCode(phone: String): VoidRes {
         val code = smsClient.sendAuthorizationCode(phone)
         phoneCodeRepository.save(
             PhoneCodeEntity(
@@ -41,7 +41,7 @@ class UserService(
         return VoidRes()
     }
 
-    fun authorizeCode(phone: String, code: String): VoidRes {
+    fun verifyCode(phone: String, code: String): VoidRes {
         val codes = phoneCodeRepository.findByStatusAndPhoneAndCode(
             status = PhoneCodeEntity.Status.UNUSED,
             phone = phone,
