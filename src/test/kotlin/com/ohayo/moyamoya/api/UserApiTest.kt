@@ -6,6 +6,7 @@ import com.ohayo.moyamoya.api.user.value.SignUpReq
 import com.ohayo.moyamoya.common.GlobalState
 import com.ohayo.moyamoya.common.toJson
 import com.ohayo.moyamoya.core.Gender
+import com.ohayo.moyamoya.core.PhoneCodeRepository
 import com.ohayo.moyamoya.infra.TestSmsClient
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.jupiter.api.Test
@@ -17,16 +18,15 @@ import org.springframework.test.web.servlet.post
 
 @TestAnnotation
 class UserApiTest {
-
     @Autowired
     lateinit var mvc: MockMvc
 
-    val dummyPhone = "01012345678"
+    val testPhone2 = "testPhone2"
 
     @Test
     fun `계정 존재여부 확인 - 존재하지 않음`() {
         mvc.get("/users/exists") {
-            param("phone", dummyPhone)
+            param("phone", testPhone2)
         }.andExpect {
             status { isOk() }
             content {
@@ -40,7 +40,7 @@ class UserApiTest {
     fun `계정 존재여부 확인 - 존재함`() {
         `회원 가입`()
         mvc.get("/users/exists") {
-            param("phone", dummyPhone)
+            param("phone", testPhone2)
         }.andExpect {
             status { isOk() }
             content {
@@ -53,40 +53,64 @@ class UserApiTest {
     @Test
     fun `인증 코드 발송`() {
         mvc.post("/users/authorization-code") {
-            param("phone", dummyPhone)
-        }.andExpect {
-            status { isOk() }
-        }
+            param("phone", testPhone2)
+        }.andExpect { status { isOk() } }
     }
 
     @Test
     fun `인증 코드 발송 후 검증`() {
         `인증 코드 발송`()
         mvc.post("/users/authorize-code") {
-            param("phone", dummyPhone)
+            param("phone", testPhone2)
             param("code", TestSmsClient.FAKE_AUTHORIZATION_CODE)
-        }.andExpect {
-            status { isOk() }
-        }
+        }.andExpect { status { isOk() } }
+    }
+    
+    @Test
+    fun `인증 코드 발송 후 검증 - 이상한 코드`() {
+        this.`인증 코드 발송`()
+        mvc.post("/users/authorize-code") {
+            param("phone", testPhone2)
+            param("code", "노영재")
+        }.andExpect { status { isBadRequest() } }
     }
 
     @Test
     fun `회원 가입`() {
+        this.`인증 코드 발송 후 검증`()
         mvc.post("/users/sign-up") {
             val id = GlobalState.school!!.id
             content = SignUpReq(
-                phone = "testPhone",
+                phone = testPhone2,
                 schoolId = id,
                 schoolGrade = 1,
                 schoolClass = 1,
                 name = "testName",
                 gender = Gender.MALE,
-                password = "testPassword",
                 profileImageUrl = "testProfileImageUrl",
+                code = TestSmsClient.FAKE_AUTHORIZATION_CODE
             ).toJson()
             contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isOk() } }
-            .andDo { print() }
+    }
+    
+    @Test
+    fun `회원 가입 - 이상한 인증 코드`() {
+        this.`인증 코드 발송 후 검증`()
+        mvc.post("/users/sign-up") {
+            val id = GlobalState.school!!.id
+            content = SignUpReq(
+                phone = testPhone2,
+                schoolId = id,
+                schoolGrade = 1,
+                schoolClass = 1,
+                name = "testName",
+                gender = Gender.MALE,
+                profileImageUrl = "testProfileImageUrl",
+                code = "노영재"
+            ).toJson()
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect { status { isBadRequest() } }
     }
 
     @Test
@@ -97,7 +121,6 @@ class UserApiTest {
             ).toJson()
             contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isOk() } }
-            .andDo { print() }
     }
 
     @Test
@@ -108,7 +131,6 @@ class UserApiTest {
             ).toJson()
             contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isUnauthorized() } }
-            .andDo { print() }
     }
 
     @Test

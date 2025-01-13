@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.api.user
 
 import com.ohayo.moyamoya.api.user.value.RefreshReq
 import com.ohayo.moyamoya.api.user.value.SignUpReq
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,11 +25,11 @@ class UserApi(
     fun authorizeCode(@RequestParam phone: String, @RequestParam code: String) = userService.authorizeCode(phone, code)
 
     @PostMapping("sign-up")
-    fun signUp(@RequestBody req: SignUpReq) = userService.signUp(req)
+    fun signUp(@RequestBody @Valid req: SignUpReq) = userService.signUp(req)
     
     @GetMapping
     fun getMyInfo() = userService.getMyInfo()
 
     @PostMapping("refresh")
-    fun refresh(@RequestBody req: RefreshReq) = userService.refresh(req)
+    fun refresh(@RequestBody @Valid req: RefreshReq) = userService.refresh(req)
 }
