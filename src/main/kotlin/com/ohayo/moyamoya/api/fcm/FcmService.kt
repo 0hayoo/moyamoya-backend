@@ -7,6 +7,7 @@ import com.ohayo.moyamoya.core.FcmTokenEntity
 import com.ohayo.moyamoya.core.FcmTokenRepository
 import com.ohayo.moyamoya.global.UserSessionHolder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FcmService(
@@ -14,6 +15,7 @@ class FcmService(
     private val fcmClient: FirebaseMessaging,
     private val sessionHolder: UserSessionHolder
 ) {
+    @Transactional(rollbackFor = [Exception::class])
     fun register(req: RegisterFcmTokenReq) {
         fcmTokenRepository.deleteByFcmToken(req.fcmToken)
         fcmTokenRepository.save(

@@ -33,11 +33,11 @@ class SecurityConfig(
         .authorizeHttpRequests {
             it.requestMatchers(
                 // Features
-                "/user/refresh",
-                "/user/sign-up",
-                "/user/exists",
-                "/user/authorize-code",
-                "/user/authorization-code",
+                "/users/refresh",
+                "/users/sign-up",
+                "/users/exists",
+                "/users/authorize-code",
+                "/users/authorization-code",
                 
                 "/schools",
 

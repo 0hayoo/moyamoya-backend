@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto:
+        create-drop
+    show-sql: true
+discord:
+  webhook-url: ${DISCORD_WEBHOOK_URL}
+neis:
+  api-key: wow
+jwt:
+  secret-key: 907345e202e27d59d11c02a7736d37a845464a4588edc4132a35062b6a592b65
+  expired:
+    access: 3_600_000 # 1h
+    refresh: 7_884_000_000 # 2M
+coolsms:
+  api-key: test
+  api-secret: test
+  sender-phone: 010

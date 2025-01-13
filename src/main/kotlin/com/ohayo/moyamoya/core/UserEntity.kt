@@ -12,7 +12,7 @@ class UserEntity(
     val phone: String,
 
     @JoinColumn(name = "school_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     val school: SchoolEntity,
 
     @Column(nullable = false)
@@ -25,10 +25,8 @@ class UserEntity(
     val name: String,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     val gender: Gender,
-
-    @Column(nullable = false)
-    val password: String,
 
     @Column(nullable = false)
     val profileImageUrl: String,
