@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserApi(
     private val userService: UserService
 ) {
-    @GetMapping("exists")
-    fun exists(@RequestParam phone: String) = userService.exists(phone)
-    
     @PostMapping("send-code")
     fun sendCode(@RequestParam phone: String) = userService.sendCode(phone)
     

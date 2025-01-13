@@ -1,10 +1,10 @@
 package com.ohayo.moyamoya.api.user
 
 import com.ohayo.moyamoya.api.common.VoidRes
-import com.ohayo.moyamoya.api.user.value.ExistsUserRes
 import com.ohayo.moyamoya.api.user.value.RefreshReq
 import com.ohayo.moyamoya.api.user.value.SignUpReq
 import com.ohayo.moyamoya.api.user.value.UserRes
+import com.ohayo.moyamoya.api.user.value.VerifyCodeRes
 import com.ohayo.moyamoya.core.*
 import com.ohayo.moyamoya.core.extension.findByIdSafety
 import com.ohayo.moyamoya.global.CustomException
@@ -26,10 +26,6 @@ class UserService(
     private val phoneCodeRepository: PhoneCodeRepository,
     private val sessionHolder: UserSessionHolder
 ) {
-    fun exists(phone: String) = ExistsUserRes(
-        isExists = userRepository.existsByPhone(phone)
-    )
-
     fun sendCode(phone: String): VoidRes {
         val code = smsClient.sendAuthorizationCode(phone)
         phoneCodeRepository.save(
@@ -41,7 +37,8 @@ class UserService(
         return VoidRes()
     }
 
-    fun verifyCode(phone: String, code: String): VoidRes {
+    @Transactional(rollbackFor = [Exception::class])
+    fun verifyCode(phone: String, code: String): VerifyCodeRes {
         val codes = phoneCodeRepository.findByStatusAndPhoneAndCode(
             status = PhoneCodeEntity.Status.UNUSED,
             phone = phone,
@@ -50,12 +47,21 @@ class UserService(
 
         if (codes.isEmpty()) throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
 
-        codes.forEach {
-            it.updateStatus()
-        }
-
+        codes.forEach { it.updateStatus() }
         phoneCodeRepository.saveAll(codes)
-        return VoidRes()
+
+        val user = userRepository.findByPhone(phone)
+        return if (user == null) {
+            VerifyCodeRes(
+                isNewUser = true,
+                token = null
+            )
+        } else {
+            VerifyCodeRes(
+                isNewUser = false,
+                token = jwtClient.generate(user)
+            )
+        }
     }
 
     fun signUp(req: SignUpReq): Token {
@@ -72,7 +78,7 @@ class UserService(
         codes.forEach {
             it.updateStatus()
         }
-        
+
         phoneCodeRepository.saveAll(codes)
 
         val school = schoolRepository.findByIdSafety(req.schoolId)

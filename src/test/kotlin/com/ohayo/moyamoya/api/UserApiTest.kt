@@ -24,33 +24,6 @@ class UserApiTest {
     val testPhone2 = "testPhone2"
 
     @Test
-    fun `계정 존재여부 확인 - 존재하지 않음`() {
-        mvc.get("/users/exists") {
-            param("phone", testPhone2)
-        }.andExpect {
-            status { isOk() }
-            content {
-                jsonPath("$.isExists", equalTo(false))
-                contentType(MediaType.APPLICATION_JSON)
-            }
-        }
-    }
-
-    @Test
-    fun `계정 존재여부 확인 - 존재함`() {
-        `회원 가입`()
-        mvc.get("/users/exists") {
-            param("phone", testPhone2)
-        }.andExpect {
-            status { isOk() }
-            content {
-                jsonPath("$.isExists", equalTo(true))
-                contentType(MediaType.APPLICATION_JSON)
-            }
-        }
-    }
-
-    @Test
     fun `인증 코드 발송`() {
         mvc.post("/users/send-code") {
             param("phone", testPhone2)
@@ -59,13 +32,29 @@ class UserApiTest {
 
     @Test
     fun `인증 코드 발송 후 검증`() {
-        `인증 코드 발송`()
+        this.`인증 코드 발송`()
         mvc.post("/users/verify-code") {
             param("phone", testPhone2)
             param("code", TestSmsClient.FAKE_AUTHORIZATION_CODE)
-        }.andExpect { status { isOk() } }
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.isNewUser", equalTo(true))
+        }
     }
-    
+
+    @Test
+    fun `회원 가입 후 재 인증`() {
+        this.`회원 가입`()
+        this.`인증 코드 발송`()
+        mvc.post("/users/verify-code") {
+            param("phone", testPhone2)
+            param("code", TestSmsClient.FAKE_AUTHORIZATION_CODE)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.isNewUser", equalTo(false))
+        }.andDo { print() }
+    }
+
     @Test
     fun `인증 코드 발송 후 검증 - 이상한 코드`() {
         this.`인증 코드 발송`()
@@ -93,7 +82,7 @@ class UserApiTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isOk() } }
     }
-    
+
     @Test
     fun `회원 가입 - 이상한 인증 코드`() {
         this.`인증 코드 발송 후 검증`()

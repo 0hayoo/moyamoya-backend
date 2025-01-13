@@ -7,7 +7,6 @@ import com.ohayo.moyamoya.core.UserEntity
 import java.time.LocalDate
 
 val dummySchool = SchoolEntity(
-    id = 0,
     name = "testName",
     type = SchoolType.HIGH,
     cityName = "testCityName",
@@ -23,7 +22,6 @@ val dummySchool = SchoolEntity(
 )
 
 val dummyUser = UserEntity(
-    id = 0,
     phone = "testPhone",
     school = dummySchool,
     schoolGrade = 1,
