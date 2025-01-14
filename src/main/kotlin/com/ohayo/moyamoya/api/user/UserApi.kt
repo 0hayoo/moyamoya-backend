@@ -30,4 +30,7 @@ class UserApi(
 
     @PostMapping("refresh")
     fun refresh(@RequestBody @Valid req: RefreshReq) = userService.refresh(req)
+    
+    @GetMapping("available-profiles")
+    fun getAvailableProfiles() = userService.getAvailableProfiles()
 }
