@@ -20,6 +20,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
+
+    
     api("com.google.firebase:firebase-admin:9.3.0")
     
     // Swagger

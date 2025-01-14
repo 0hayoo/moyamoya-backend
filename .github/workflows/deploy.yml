@@ -28,6 +28,11 @@ jobs:
           coolsms.api-key: ${{ secrets.COOL_SMS_API_KEY }}
           coolsms.api-secret: ${{ secrets.COOL_SMS_API_SECRET }}
           coolsms.sender-phone: ${{ secrets.COOL_SMS_SENDER_PHONE }}
+          cloud.aws.credentials.accessKey: ${{ secrets.S3_ACCESS_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.S3.SECRET_KEY }}
+          cloud.aws.s3-bucket: ${{ secrets.S3_BUCKET }}
+          cloud.aws.region.static: ${{ secrets.S3_REGION }}
+          dev.secret-key: ${{ secrets.DEV_SECRET_KEY }}
           spring.profiles.active: 'prd'
       - name: Setting firebase
         run: |

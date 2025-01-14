@@ -1,5 +1,7 @@
-package com.ohayo.moyamoya.global
+package com.ohayo.moyamoya.global.config
 
+import com.ohayo.moyamoya.global.ErrorResponseSender
+import com.ohayo.moyamoya.global.HttpExceptionFilter
 import com.ohayo.moyamoya.global.jwt.JwtAuthenticationFilter
 import com.ohayo.moyamoya.global.jwt.JwtExceptionFilter
 import org.springframework.context.annotation.Bean
@@ -14,7 +16,6 @@ import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-
 
 @Configuration
 @EnableWebSecurity

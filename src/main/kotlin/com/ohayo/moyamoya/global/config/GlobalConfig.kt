@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.global
+package com.ohayo.moyamoya.global.config
 
 import com.ohayo.moyamoya.infra.discord.DiscordProperties
 import mu.KotlinLogging

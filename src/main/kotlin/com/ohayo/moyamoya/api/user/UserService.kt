@@ -1,10 +1,7 @@
 package com.ohayo.moyamoya.api.user
 
 import com.ohayo.moyamoya.api.common.VoidRes
-import com.ohayo.moyamoya.api.user.value.RefreshReq
-import com.ohayo.moyamoya.api.user.value.SignUpReq
-import com.ohayo.moyamoya.api.user.value.UserRes
-import com.ohayo.moyamoya.api.user.value.VerifyCodeRes
+import com.ohayo.moyamoya.api.user.value.*
 import com.ohayo.moyamoya.core.*
 import com.ohayo.moyamoya.core.extension.findByIdSafety
 import com.ohayo.moyamoya.global.CustomException
@@ -26,11 +23,11 @@ class UserService(
     private val phoneCodeRepository: PhoneCodeRepository,
     private val sessionHolder: UserSessionHolder
 ) {
-    fun sendCode(phone: String): VoidRes {
-        val code = smsClient.sendAuthorizationCode(phone)
+    fun sendCode(req: SendCodeReq): VoidRes {
+        val code = smsClient.sendAuthorizationCode(req.phone)
         phoneCodeRepository.save(
             PhoneCodeEntity(
-                phone = phone,
+                phone = req.phone,
                 code = code
             )
         )
@@ -38,11 +35,11 @@ class UserService(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    fun verifyCode(phone: String, code: String): VerifyCodeRes {
+    fun verifyCode(req: VerifyCodeReq): VerifyCodeRes {
         val codes = phoneCodeRepository.findByStatusAndPhoneAndCode(
             status = PhoneCodeEntity.Status.UNUSED,
-            phone = phone,
-            code = code
+            phone = req.phone,
+            code = req.code
         )
 
         if (codes.isEmpty()) throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
@@ -50,7 +47,7 @@ class UserService(
         codes.forEach { it.updateStatus() }
         phoneCodeRepository.saveAll(codes)
 
-        val user = userRepository.findByPhone(phone)
+        val user = userRepository.findByPhone(req.phone)
         return if (user == null) {
             VerifyCodeRes(
                 isNewUser = true,
