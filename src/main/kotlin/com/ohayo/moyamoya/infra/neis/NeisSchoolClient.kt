@@ -26,7 +26,7 @@ class NeisSchoolClient(
     private val schoolRepository: SchoolRepository
 ) { 
     @Transactional
-    @Scheduled(cron = "0 0 0 1 * *")
+//    @Scheduled(cron = "0 0 0 1 * *")
     fun run() {
         schoolRepository.deleteAll()
         schoolRepository.saveAll(getSchools())
