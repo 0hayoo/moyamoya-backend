@@ -1,9 +1,9 @@
 package com.ohayo.moyamoya.api
 
-import com.ohayo.moyamoya.core.Gender
-import com.ohayo.moyamoya.core.SchoolEntity
-import com.ohayo.moyamoya.core.SchoolType
-import com.ohayo.moyamoya.core.UserEntity
+import com.ohayo.moyamoya.core.user.Gender
+import com.ohayo.moyamoya.core.school.SchoolEntity
+import com.ohayo.moyamoya.core.school.SchoolType
+import com.ohayo.moyamoya.core.user.UserEntity
 import java.time.LocalDate
 
 val dummySchool = SchoolEntity(

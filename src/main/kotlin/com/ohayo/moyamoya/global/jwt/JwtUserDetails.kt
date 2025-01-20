@@ -1,6 +1,6 @@
 package com.ohayo.moyamoya.global.jwt
 
-import com.ohayo.moyamoya.core.UserEntity
+import com.ohayo.moyamoya.core.user.UserEntity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

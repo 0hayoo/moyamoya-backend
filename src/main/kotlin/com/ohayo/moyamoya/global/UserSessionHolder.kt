@@ -1,6 +1,6 @@
 package com.ohayo.moyamoya.global
 
-import com.ohayo.moyamoya.core.UserEntity
+import com.ohayo.moyamoya.core.user.UserEntity
 import com.ohayo.moyamoya.global.jwt.JwtUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder

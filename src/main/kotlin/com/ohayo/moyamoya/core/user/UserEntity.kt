@@ -1,5 +1,7 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.user
 
+import com.ohayo.moyamoya.core.BaseEntity
+import com.ohayo.moyamoya.core.school.SchoolEntity
 import jakarta.persistence.*
 
 @Entity

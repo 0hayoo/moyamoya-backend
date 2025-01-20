@@ -1,5 +1,6 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.phonecode
 
+import com.ohayo.moyamoya.core.BaseEntity
 import jakarta.persistence.*
 
 @Entity

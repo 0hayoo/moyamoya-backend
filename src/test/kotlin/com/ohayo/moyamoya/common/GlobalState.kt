@@ -2,10 +2,10 @@ package com.ohayo.moyamoya.common
 
 import com.ohayo.moyamoya.api.dummySchool
 import com.ohayo.moyamoya.api.dummyUser
-import com.ohayo.moyamoya.core.SchoolEntity
-import com.ohayo.moyamoya.core.SchoolRepository
-import com.ohayo.moyamoya.core.UserEntity
-import com.ohayo.moyamoya.core.UserRepository
+import com.ohayo.moyamoya.core.school.SchoolEntity
+import com.ohayo.moyamoya.core.school.SchoolRepository
+import com.ohayo.moyamoya.core.user.UserEntity
+import com.ohayo.moyamoya.core.user.UserRepository
 import com.ohayo.moyamoya.infra.token.JwtClient
 import com.ohayo.moyamoya.infra.token.Token
 

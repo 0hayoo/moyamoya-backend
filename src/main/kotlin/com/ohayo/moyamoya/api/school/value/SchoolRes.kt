@@ -1,6 +1,6 @@
 package com.ohayo.moyamoya.api.school.value
 
-import com.ohayo.moyamoya.core.SchoolType
+import com.ohayo.moyamoya.core.school.SchoolType
 import java.time.LocalDate
 
 data class SchoolRes(

@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.user
 
 import com.ohayo.moyamoya.global.CustomException
 import org.springframework.data.jpa.repository.JpaRepository

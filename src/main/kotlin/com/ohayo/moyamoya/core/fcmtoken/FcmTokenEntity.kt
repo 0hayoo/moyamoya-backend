@@ -1,5 +1,7 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.fcmtoken
 
+import com.ohayo.moyamoya.core.BaseEntity
+import com.ohayo.moyamoya.core.user.UserEntity
 import jakarta.persistence.*
 
 @Entity
@@ -7,7 +9,7 @@ import jakarta.persistence.*
 class FcmTokenEntity(
     @Column(nullable = false)
     val fcmToken: String,
-    
+
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     val user: UserEntity,

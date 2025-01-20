@@ -5,8 +5,7 @@ import com.ohayo.moyamoya.api.user.value.RefreshReq
 import com.ohayo.moyamoya.api.user.value.SignUpReq
 import com.ohayo.moyamoya.common.GlobalState
 import com.ohayo.moyamoya.common.toJson
-import com.ohayo.moyamoya.core.Gender
-import com.ohayo.moyamoya.core.PhoneCodeRepository
+import com.ohayo.moyamoya.core.user.Gender
 import com.ohayo.moyamoya.infra.TestSmsClient
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.jupiter.api.Test

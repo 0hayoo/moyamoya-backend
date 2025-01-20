@@ -1,7 +1,6 @@
 package com.ohayo.moyamoya.api
 
 import com.ohayo.moyamoya.TestAnnotation
-import com.ohayo.moyamoya.core.SchoolEntity
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

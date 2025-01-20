@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.school
 
 enum class SchoolType(
     val limit: Int

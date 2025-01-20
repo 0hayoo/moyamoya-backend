@@ -5,8 +5,13 @@ import com.amazonaws.services.s3.model.ListObjectsV2Request
 import com.amazonaws.services.s3.model.ListObjectsV2Result
 import com.ohayo.moyamoya.api.common.VoidRes
 import com.ohayo.moyamoya.api.user.value.*
-import com.ohayo.moyamoya.core.*
 import com.ohayo.moyamoya.core.extension.findByIdSafety
+import com.ohayo.moyamoya.core.phonecode.PhoneCodeEntity
+import com.ohayo.moyamoya.core.phonecode.PhoneCodeRepository
+import com.ohayo.moyamoya.core.school.SchoolRepository
+import com.ohayo.moyamoya.core.user.UserEntity
+import com.ohayo.moyamoya.core.user.UserRepository
+import com.ohayo.moyamoya.core.user.findByPhoneSafety
 import com.ohayo.moyamoya.global.CustomException
 import com.ohayo.moyamoya.global.UserSessionHolder
 import com.ohayo.moyamoya.infra.s3.S3Properties

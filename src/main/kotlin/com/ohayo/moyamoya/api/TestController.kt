@@ -1,7 +1,7 @@
 package com.ohayo.moyamoya.api
 
-import com.ohayo.moyamoya.core.UserRepository
-import com.ohayo.moyamoya.core.findByPhoneSafety
+import com.ohayo.moyamoya.core.user.UserRepository
+import com.ohayo.moyamoya.core.user.findByPhoneSafety
 import com.ohayo.moyamoya.global.CustomException
 import com.ohayo.moyamoya.infra.token.JwtClient
 import com.ohayo.moyamoya.infra.token.Token

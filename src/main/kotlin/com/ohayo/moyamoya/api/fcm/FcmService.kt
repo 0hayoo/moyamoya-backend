@@ -3,8 +3,8 @@ package com.ohayo.moyamoya.api.fcm
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
-import com.ohayo.moyamoya.core.FcmTokenEntity
-import com.ohayo.moyamoya.core.FcmTokenRepository
+import com.ohayo.moyamoya.core.fcmtoken.FcmTokenEntity
+import com.ohayo.moyamoya.core.fcmtoken.FcmTokenRepository
 import com.ohayo.moyamoya.global.UserSessionHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

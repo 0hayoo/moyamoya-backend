@@ -1,8 +1,8 @@
 package com.ohayo.moyamoya.api.user.value
 
-import com.ohayo.moyamoya.core.Gender
-import com.ohayo.moyamoya.core.SchoolEntity
-import com.ohayo.moyamoya.core.UserEntity
+import com.ohayo.moyamoya.core.user.Gender
+import com.ohayo.moyamoya.core.school.SchoolEntity
+import com.ohayo.moyamoya.core.user.UserEntity
 
 data class UserRes(
     val id: Int,

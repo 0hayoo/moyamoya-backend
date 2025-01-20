@@ -1,6 +1,6 @@
 package com.ohayo.moyamoya.infra.token
 
-import com.ohayo.moyamoya.core.UserEntity
+import com.ohayo.moyamoya.core.user.UserEntity
 import com.ohayo.moyamoya.global.CustomException
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.SignatureException

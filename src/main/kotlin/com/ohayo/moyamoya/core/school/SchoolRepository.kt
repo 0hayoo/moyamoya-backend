@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.school
 
 import com.ohayo.moyamoya.api.school.value.SchoolRes
 import org.springframework.data.jpa.repository.JpaRepository

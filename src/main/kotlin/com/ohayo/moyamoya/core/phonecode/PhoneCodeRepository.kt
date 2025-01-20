@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.phonecode
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

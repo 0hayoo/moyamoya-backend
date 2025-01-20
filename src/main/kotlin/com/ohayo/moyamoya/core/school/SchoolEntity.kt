@@ -1,5 +1,6 @@
-package com.ohayo.moyamoya.core
+package com.ohayo.moyamoya.core.school
 
+import com.ohayo.moyamoya.core.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -10,7 +11,8 @@ class SchoolEntity(
     val name: String,
 
     @Enumerated(value = EnumType.STRING)
-    val type: SchoolType?,
+    @Column(nullable = false)
+    val type: SchoolType,
 
     @Column(nullable = false)
     val cityName: String,
