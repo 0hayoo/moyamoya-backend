@@ -24,12 +24,12 @@ class NeisSchoolClient(
     private val restClient: RestClient,
     private val neisProperties: NeisProperties,
     private val schoolRepository: SchoolRepository
-): CommandLineRunner {
+)/*: CommandLineRunner*/ {
     
-    @Transactional
-    override fun run(vararg args: String?) {
-        run()
-    }
+//    @Transactional
+//    override fun run(vararg args: String?) {
+//        run()
+//    }
     
     @Transactional
 //    @Scheduled(cron = "0 0 0 1 * *")
