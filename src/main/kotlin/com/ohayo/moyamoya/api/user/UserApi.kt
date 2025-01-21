@@ -26,11 +26,11 @@ class UserApi(
     fun signUp(@RequestBody @Valid req: SignUpReq) = userService.signUp(req)
 
     @GetMapping
-    fun getMyInfo() = userService.getMyInfo()
+    fun getMyInfo() = userService.getMyUserInfo()
 
     @PostMapping("refresh")
     fun refresh(@RequestBody @Valid req: RefreshReq) = userService.refresh(req)
     
-    @GetMapping("available-profiles")
-    fun getAvailableProfiles() = userService.getAvailableProfiles()
+    @GetMapping("available-profile-images")
+    fun getAvailableProfiles() = userService.getAvailableProfileImages()
 }

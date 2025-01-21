@@ -9,7 +9,6 @@ import com.ohayo.moyamoya.core.extension.findByIdSafety
 import com.ohayo.moyamoya.core.phonecode.PhoneCodeEntity
 import com.ohayo.moyamoya.core.phonecode.PhoneCodeRepository
 import com.ohayo.moyamoya.core.school.SchoolRepository
-import com.ohayo.moyamoya.core.user.UserEntity
 import com.ohayo.moyamoya.core.user.UserRepository
 import com.ohayo.moyamoya.core.user.findByPhoneSafety
 import com.ohayo.moyamoya.global.CustomException
@@ -73,6 +72,7 @@ class UserService(
         }
     }
 
+    @Transactional(rollbackFor = [Exception::class])
     fun signUp(req: SignUpReq): Token {
         if (userRepository.existsByPhone(req.phone)) throw CustomException(HttpStatus.BAD_REQUEST, "이미 가입된 계정")
 
@@ -91,23 +91,13 @@ class UserService(
         phoneCodeRepository.saveAll(codes)
 
         val school = schoolRepository.findByIdSafety(req.schoolId)
-        val user = userRepository.save(
-            UserEntity(
-                phone = req.phone,
-                school = school,
-                schoolGrade = req.schoolGrade,
-                schoolClass = req.schoolClass,
-                name = req.name,
-                gender = req.gender,
-                profileImageUrl = req.profileImageUrl,
-            )
-        )
+        val user = userRepository.save(req.toEntity(school))
 
         return jwtClient.generate(user)
     }
 
     @Transactional(readOnly = true)
-    fun getMyInfo(): UserRes = UserRes.of(sessionHolder.current())
+    fun getMyUserInfo(): UserRes = UserRes.of(sessionHolder.current())
 
     fun refresh(req: RefreshReq): Token {
         jwtClient.parseToken(req.refreshToken)
@@ -120,25 +110,25 @@ class UserService(
         return jwtClient.generate(user)
     }
 
-    fun getAvailableProfiles(): List<String> {
+    fun getAvailableProfileImages(): List<String> {
         val urls = arrayListOf<String>()
 
         var result: ListObjectsV2Result
         val request = ListObjectsV2Request()
             .withBucketName(s3Properties.s3bucket)
             .withPrefix("profile-images/")
-        
+
         do {
             result = amazonS3.listObjectsV2(request)
             for (objectSummary in result.objectSummaries) {
                 if (objectSummary.size == 0L) continue
-                
+
                 val url = amazonS3.getUrl(s3Properties.s3bucket, objectSummary.key).toString()
                 urls.add(url)
             }
             request.continuationToken = result.nextContinuationToken
         } while (result.isTruncated) // 페이지네이션 처리
-        
+
         return urls
     }
 }

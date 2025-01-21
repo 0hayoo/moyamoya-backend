@@ -38,7 +38,7 @@ class SecurityConfig(
                 "/users/verify-code",
                 "/users/sign-up",
                 "/users/refresh",
-                "/users/available-profiles",
+                "/users/available-profile-images",
                 
                 "/schools",
 

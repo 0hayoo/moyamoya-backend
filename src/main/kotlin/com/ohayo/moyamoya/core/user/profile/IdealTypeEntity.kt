@@ -1,34 +1,33 @@
 package com.ohayo.moyamoya.core.user.profile
 
+import com.ohayo.moyamoya.api.user.profile.value.IdealTypeDto
 import jakarta.persistence.*
 
 @Embeddable
 class IdealTypeEntity(
     @Column(nullable = false)
-    val messageInterval: MessageInterval,
+    var messageInterval: MessageInterval,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val fashionStyle: FashionStyle,
+    var fashionStyle: FashionStyle,
 
     @Column(nullable = false)
-    val hasGlasses: Boolean,
+    var hasGlasses: Boolean,
 
     @Column(nullable = false)
-    val heightLevel: HeightLevel,
+    var heightLevel: HeightLevel,
 
-    // TODO: 성격
-//    @Column(nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    val mbti: Mbti,
+    @Column(nullable = false)
+    var personality: String,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val faceType: FaceType,
+    var faceType: FaceType,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val bodyType: BodyType,
+    var bodyType: BodyType,
 
     @Column(nullable = false)
     @Embedded
@@ -38,9 +37,21 @@ class IdealTypeEntity(
         AttributeOverride(name = "hasPerm", column = Column(name = "idealTypeHairStyleHasPerm")),
         AttributeOverride(name = "hasBang", column = Column(name = "idealTypeHairStyleHasBang")),
     )
-    val hairStyle: HairStyle,
+    val hairStyle: HairStyleEntity,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val skinColor: SkinColor,
+    var skinColor: SkinColor,
 )
+
+fun IdealTypeEntity.update(dto: IdealTypeDto) {
+    messageInterval = dto.messageInterval
+    fashionStyle = dto.fashionStyle
+    hasGlasses = dto.hasGlasses
+    heightLevel = dto.heightLevel
+    personality = dto.personality
+    faceType = dto.faceType
+    bodyType = dto.bodyType
+    hairStyle.update(dto.hairStyle)
+    skinColor = dto.skinColor
+}

@@ -1,6 +1,8 @@
 package com.ohayo.moyamoya.api.user.value
 
+import com.ohayo.moyamoya.core.school.SchoolEntity
 import com.ohayo.moyamoya.core.user.Gender
+import com.ohayo.moyamoya.core.user.UserEntity
 import jakarta.validation.constraints.NotNull
 
 data class SignUpReq(
@@ -27,4 +29,14 @@ data class SignUpReq(
 
     @field:NotNull
     val code: String
-)
+) {
+    fun toEntity(school: SchoolEntity) = UserEntity(
+        phone = phone,
+        school = school,
+        schoolGrade = schoolGrade,
+        schoolClass = schoolClass,
+        name = name,
+        gender = gender,
+        profileImageUrl = profileImageUrl,
+    )
+}

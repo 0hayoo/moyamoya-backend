@@ -1,5 +1,6 @@
 package com.ohayo.moyamoya.core.user.profile
 
+import com.ohayo.moyamoya.api.user.profile.value.UpsertUserProfileReq
 import com.ohayo.moyamoya.core.BaseEntity
 import com.ohayo.moyamoya.core.user.UserEntity
 import jakarta.persistence.*
@@ -30,10 +31,15 @@ class UserProfileEntity(
         AttributeOverride(name = "fashionStyle", column = Column(name = "idealTypeFashionStyle")),
         AttributeOverride(name = "hasGlasses", column = Column(name = "idealTypeHasGlasses")),
         AttributeOverride(name = "heightLevel", column = Column(name = "idealTypeHeightLevel")),
-//        AttributeOverride(name = "mbti", column = Column(name = "myTypeMessageMbti")),
+        AttributeOverride(name = "personality", column = Column(name = "idealTypePersonality")),
         AttributeOverride(name = "faceType", column = Column(name = "idealTypeFaceType")),
         AttributeOverride(name = "bodyType", column = Column(name = "idealTypeBodyType")),
         AttributeOverride(name = "skinColor", column = Column(name = "idealTypeSkinColor")),
     )
     val idealType: IdealTypeEntity
 ) : BaseEntity()
+
+fun UserProfileEntity.update(req: UpsertUserProfileReq) {
+    myType.update(req.myType)
+    idealType.update(req.idealType)
+}
