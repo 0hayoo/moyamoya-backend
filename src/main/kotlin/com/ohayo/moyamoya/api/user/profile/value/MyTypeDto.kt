@@ -4,7 +4,7 @@ import com.ohayo.moyamoya.core.user.profile.*
 
 data class MyTypeDto(
     val messageInterval: MessageInterval,
-    val fashionStyle: FashionStyle,
+    val fashionStyle: List<FashionStyle>,
     val hasGlasses: Boolean,
     val height: Int,
     val mbti: Mbti,
@@ -16,7 +16,7 @@ data class MyTypeDto(
     companion object {
         fun of(entity: MyTypeEntity) = MyTypeDto(
             messageInterval = entity.messageInterval,
-            fashionStyle = entity.fashionStyle,
+            fashionStyle = FashionStyle.listOf(entity.fashionStyle),
             hasGlasses = entity.hasGlasses,
             height = entity.height,
             mbti = entity.mbti,
@@ -29,7 +29,7 @@ data class MyTypeDto(
     
     fun toEntity() = MyTypeEntity(
         messageInterval = messageInterval,
-        fashionStyle = fashionStyle,
+        fashionStyle = fashionStyle.toInternalForm(),
         hasGlasses = hasGlasses,
         height = height,
         mbti = mbti,

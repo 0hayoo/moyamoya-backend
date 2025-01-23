@@ -4,7 +4,7 @@ import com.ohayo.moyamoya.core.user.profile.*
 
 data class IdealTypeDto(
     val messageInterval: MessageInterval,
-    val fashionStyle: FashionStyle,
+    val fashionStyle: List<FashionStyle>,
     val hasGlasses: Boolean,
     val heightLevel: HeightLevel,
     val ageType: AgeType,
@@ -17,7 +17,7 @@ data class IdealTypeDto(
     companion object {
         fun of(entity: IdealTypeEntity) = IdealTypeDto(
             messageInterval = entity.messageInterval,
-            fashionStyle = entity.fashionStyle,
+            fashionStyle = entity.fashionStyles,
             hasGlasses = entity.hasGlasses,
             heightLevel = entity.heightLevel,
             ageType = entity.ageType,
@@ -31,7 +31,7 @@ data class IdealTypeDto(
 
     fun toEntity() = IdealTypeEntity(
         messageInterval = messageInterval,
-        fashionStyle = fashionStyle,
+        fashionStyle = fashionStyle.toInternalForm(),
         hasGlasses = hasGlasses,
         heightLevel = heightLevel,
         ageType = ageType,

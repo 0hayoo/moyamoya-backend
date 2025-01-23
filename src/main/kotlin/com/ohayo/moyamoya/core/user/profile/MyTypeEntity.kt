@@ -9,8 +9,7 @@ class MyTypeEntity(
     var messageInterval: MessageInterval,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    var fashionStyle: FashionStyle,
+    var fashionStyle: String,
 
     @Column(nullable = false)
     var hasGlasses: Boolean,
@@ -47,7 +46,7 @@ class MyTypeEntity(
 
 fun MyTypeEntity.update(dto: MyTypeDto) {
     messageInterval = dto.messageInterval
-    fashionStyle = dto.fashionStyle
+    fashionStyle = dto.fashionStyle.toInternalForm()
     hasGlasses = dto.hasGlasses
     height = dto.height
     mbti = dto.mbti

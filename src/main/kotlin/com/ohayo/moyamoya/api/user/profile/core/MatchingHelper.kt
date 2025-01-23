@@ -1,14 +1,13 @@
 package com.ohayo.moyamoya.api.user.profile.core
 
-import com.ohayo.moyamoya.api.school.value.SchoolRes
 import com.ohayo.moyamoya.core.user.Gender
 import com.ohayo.moyamoya.core.user.profile.*
 import com.ohayo.moyamoya.global.CustomException
 import org.springframework.http.HttpStatus
 
-object MatchHelper {
-    fun matchUsers(users: List<UserProfileEntity>): List<MatchResult> {
-        val graph = arrayListOf<MatchGraphEdge>()
+object MatchingHelper {
+    fun matchUsers(users: List<UserProfileEntity>): List<MatchingResult> {
+        val graph = arrayListOf<MatchingGraphEdge>()
         val males = users.filter { it.user.gender == Gender.MALE }
         val females = users.filter { it.user.gender == Gender.FEMALE }
         val heights = users.map { it.myType.height }
@@ -19,7 +18,7 @@ object MatchHelper {
                 val femaleToMaleScore = getScore(from = female, to = female, heights = heights)
 
                 graph.add(
-                    MatchGraphEdge(
+                    MatchingGraphEdge(
                         score = maleToFemaleScore + femaleToMaleScore,
                         male = male,
                         female = female
@@ -29,13 +28,13 @@ object MatchHelper {
         }
 
         val sortedGraph = graph.sortedByDescending { it.score }.toMutableList()
-        val matchResults = arrayListOf<MatchResult>()
+        val matchingResults = arrayListOf<MatchingResult>()
 
         sortedGraph.forEach { edge ->
             if (edge.visited) return@forEach
 
-            matchResults.add(
-                MatchResult(
+            matchingResults.add(
+                MatchingResult(
                     male = edge.male,
                     female = edge.female,
                 )
@@ -49,31 +48,28 @@ object MatchHelper {
                 }
         }
 
-        return matchResults
+        return matchingResults
     }
 
     private fun getScore(from: UserProfileEntity, to: UserProfileEntity, heights: List<Int>): Int {
         val idealTypeHeightLevels = getHeightLevels(height = to.myType.height, heights = heights)
         val score = (if (from.idealType.messageInterval == to.myType.messageInterval) 10 else -10) +  // 연락 텀
-                (if (from.idealType.fashionStyle == to.myType.fashionStyle) 10 else -10) + // 패션 스타일
-                (if (from.idealType.hasGlasses == to.myType.hasGlasses) 10 else -10) + // 안경
+                (FashionStyle.listOf(from.idealType.fashionStyle)
+                    .intersect(FashionStyle.listOf(to.myType.fashionStyle).toSet()).size * 5) + // 패션 스타일
+                (if (from.idealType.hasGlasses == to.myType.hasGlasses) 5 else 0) + // 안경
                 (if (from.idealType.faceType == to.myType.faceType) 10 else -10) + // 얼굴상
-                (if (from.idealType.bodyType == to.myType.bodyType) 10 else -10) + // 체형
+                (if (from.idealType.bodyType == to.myType.bodyType) 10 else -5) + // 체형
+                (if (from.idealType.hairStyle.length == to.myType.hairStyle.length) 5 else -5) +
+                (if (from.idealType.hairStyle.isCurly == to.myType.hairStyle.isCurly) 5 else -5) +
+                (if (from.idealType.hairStyle.hasPerm == to.myType.hairStyle.hasPerm) 5 else -5) +
+                (if (from.idealType.hairStyle.hasBang == to.myType.hairStyle.hasBang) 5 else -5) +
                 (if (from.idealType.skinColor == to.myType.skinColor) 10 else -10) + // 피부색
-                (if (idealTypeHeightLevels.contains(from.idealType.heightLevel)) 10 else -10) + // 키
                 (if (
-                    from.user.schoolGrade == to.user.schoolGrade && from.idealType.ageType == AgeType.SAME ||
-                    from.user.schoolGrade > to.user.schoolGrade && from.idealType.ageType == AgeType.YOUNGER ||
-                    from.user.schoolGrade < to.user.schoolGrade && from.idealType.ageType == AgeType.OLDER
-                ) 10 else -10) // 나이
-
-        // 성격
-        // TODO
-
-        // 머리
-        // TODO
-        
-
+                    from.idealType.heightLevel != HeightLevel.ANY &&
+                    idealTypeHeightLevels.contains(from.idealType.heightLevel)
+                ) 10 else 0) + // 키
+                (if (from.idealType.ageType.isMatched(from.user.schoolGrade, to.user.schoolGrade)) 10 else -10) + // 나이
+                from.myType.mbti.score(to.myType.mbti) // 성격 (mbti)
         return score
     }
 

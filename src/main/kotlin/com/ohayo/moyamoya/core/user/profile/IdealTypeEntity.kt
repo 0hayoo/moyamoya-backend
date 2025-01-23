@@ -9,15 +9,14 @@ class IdealTypeEntity(
     var messageInterval: MessageInterval,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    var fashionStyle: FashionStyle,
+    var fashionStyle: String,
 
     @Column(nullable = false)
     var hasGlasses: Boolean,
 
     @Column(nullable = false)
     var heightLevel: HeightLevel,
-    
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var ageType: AgeType,
@@ -46,11 +45,14 @@ class IdealTypeEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var skinColor: SkinColor,
-)
+) {
+    val fashionStyles: List<FashionStyle>
+        get() = fashionStyle.split(FashionStyle.SPLITTER).mapNotNull(FashionStyle::of)
+}
 
 fun IdealTypeEntity.update(dto: IdealTypeDto) {
     messageInterval = dto.messageInterval
-    fashionStyle = dto.fashionStyle
+    fashionStyle = dto.fashionStyle.toInternalForm()
     hasGlasses = dto.hasGlasses
     heightLevel = dto.heightLevel
     personality = dto.personality
