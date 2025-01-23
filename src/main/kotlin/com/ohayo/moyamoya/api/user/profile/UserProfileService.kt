@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.api.user.profile
 
 import com.ohayo.moyamoya.api.common.VoidRes
 import com.ohayo.moyamoya.api.user.profile.value.UpsertUserProfileReq
+import com.ohayo.moyamoya.core.user.profile.HeightLevel
 import com.ohayo.moyamoya.core.user.profile.UserProfileRepository
 import com.ohayo.moyamoya.core.user.profile.update
 import com.ohayo.moyamoya.global.CustomException

@@ -17,6 +17,9 @@ class IdealTypeEntity(
 
     @Column(nullable = false)
     var heightLevel: HeightLevel,
+    
+    @Column(nullable = false)
+    var ageType: AgeType,
 
     @Column(nullable = false)
     var personality: String,

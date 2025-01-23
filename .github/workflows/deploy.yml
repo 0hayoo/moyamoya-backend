@@ -33,6 +33,7 @@ jobs:
           cloud.aws.s3-bucket: ${{ secrets.S3_BUCKET }}
           cloud.aws.region.static: ${{ secrets.S3_REGION }}
           dev.secret-key: ${{ secrets.DEV_SECRET_KEY }}
+          discord.webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           spring.profiles.active: 'prd'
       - name: Setting firebase
         run: |
