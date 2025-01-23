@@ -19,6 +19,7 @@ class IdealTypeEntity(
     var heightLevel: HeightLevel,
     
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var ageType: AgeType,
 
     @Column(nullable = false)
