@@ -10,6 +10,7 @@ interface SchoolRepository : JpaRepository<SchoolEntity, Int> {
     @Query(
         """
     SELECT new com.ohayo.moyamoya.api.school.value.SchoolRes(
+        s.id,
         s.name,
         s.type,
         s.cityName,

@@ -4,6 +4,7 @@ import com.ohayo.moyamoya.core.school.SchoolType
 import java.time.LocalDate
 
 data class SchoolRes(
+    val id: Int,
     val name: String,
     val type: SchoolType?,
     val cityName: String,
