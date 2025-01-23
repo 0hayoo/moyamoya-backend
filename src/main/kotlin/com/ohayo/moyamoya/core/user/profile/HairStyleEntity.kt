@@ -16,10 +16,10 @@ data class HairStyleEntity(
     var isCurly: Boolean,
 
     @Column(nullable = false)
-    var hasPerm: Boolean?, // null for males, true/false for females
+    var hasPerm: Boolean,
 
     @Column(nullable = false)
-    var hasBang: Boolean?, // null for males, true/false for females
+    var hasBang: Boolean,
 )
 
 fun HairStyleEntity.update(dto: HairStyleDto) {

@@ -2,7 +2,7 @@ package com.ohayo.moyamoya.api.user.profile.value
 
 import com.ohayo.moyamoya.core.user.profile.*
 
-data class MyTypeDto(
+data class MyInfoDto(
     val messageInterval: MessageInterval,
     val fashionStyle: List<FashionStyle>,
     val hasGlasses: Boolean,
@@ -14,7 +14,7 @@ data class MyTypeDto(
     val skinColor: SkinColor,
 ) {
     companion object {
-        fun of(entity: MyTypeEntity) = MyTypeDto(
+        fun of(entity: MyInfoEntity) = MyInfoDto(
             messageInterval = entity.messageInterval,
             fashionStyle = FashionStyle.listOf(entity.fashionStyle),
             hasGlasses = entity.hasGlasses,
@@ -27,7 +27,7 @@ data class MyTypeDto(
         )
     }
     
-    fun toEntity() = MyTypeEntity(
+    fun toEntity() = MyInfoEntity(
         messageInterval = messageInterval,
         fashionStyle = fashionStyle.toInternalForm(),
         hasGlasses = hasGlasses,

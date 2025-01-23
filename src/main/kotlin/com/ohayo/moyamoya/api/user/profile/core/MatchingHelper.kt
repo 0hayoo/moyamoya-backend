@@ -10,7 +10,7 @@ object MatchingHelper {
         val graph = arrayListOf<MatchingGraphEdge>()
         val males = users.filter { it.user.gender == Gender.MALE }
         val females = users.filter { it.user.gender == Gender.FEMALE }
-        val heights = users.map { it.myType.height }
+        val heights = users.map { it.myInfo.height }
 
         males.forEach { male ->
             females.forEach { female ->
@@ -52,24 +52,24 @@ object MatchingHelper {
     }
 
     private fun getScore(from: UserProfileEntity, to: UserProfileEntity, heights: List<Int>): Int {
-        val idealTypeHeightLevels = getHeightLevels(height = to.myType.height, heights = heights)
-        val score = (if (from.idealType.messageInterval == to.myType.messageInterval) 10 else -10) +  // 연락 텀
+        val idealTypeHeightLevels = getHeightLevels(height = to.myInfo.height, heights = heights)
+        val score = (if (from.idealType.messageInterval == to.myInfo.messageInterval) 10 else -10) +  // 연락 텀
                 (FashionStyle.listOf(from.idealType.fashionStyle)
-                    .intersect(FashionStyle.listOf(to.myType.fashionStyle).toSet()).size * 5) + // 패션 스타일
-                (if (from.idealType.hasGlasses == to.myType.hasGlasses) 5 else 0) + // 안경
-                (if (from.idealType.faceType == to.myType.faceType) 10 else -10) + // 얼굴상
-                (if (from.idealType.bodyType == to.myType.bodyType) 10 else -5) + // 체형
-                (if (from.idealType.hairStyle.length == to.myType.hairStyle.length) 5 else -5) +
-                (if (from.idealType.hairStyle.isCurly == to.myType.hairStyle.isCurly) 5 else -5) +
-                (if (from.idealType.hairStyle.hasPerm == to.myType.hairStyle.hasPerm) 5 else -5) +
-                (if (from.idealType.hairStyle.hasBang == to.myType.hairStyle.hasBang) 5 else -5) +
-                (if (from.idealType.skinColor == to.myType.skinColor) 10 else -10) + // 피부색
+                    .intersect(FashionStyle.listOf(to.myInfo.fashionStyle).toSet()).size * 5) + // 패션 스타일
+                (if (from.idealType.hasGlasses == to.myInfo.hasGlasses) 5 else 0) + // 안경
+                (if (from.idealType.faceType == to.myInfo.faceType) 10 else -10) + // 얼굴상
+                (if (from.idealType.bodyType == to.myInfo.bodyType) 10 else -5) + // 체형
+                (if (from.idealType.hairStyle.length == to.myInfo.hairStyle.length) 5 else -5) +
+                (if (from.idealType.hairStyle.isCurly == to.myInfo.hairStyle.isCurly) 5 else -5) +
+                (if (from.idealType.hairStyle.hasPerm == to.myInfo.hairStyle.hasPerm) 5 else -5) +
+                (if (from.idealType.hairStyle.hasBang == to.myInfo.hairStyle.hasBang) 5 else -5) +
+                (if (from.idealType.skinColor == to.myInfo.skinColor) 10 else -10) + // 피부색
                 (if (
                     from.idealType.heightLevel != HeightLevel.ANY &&
                     idealTypeHeightLevels.contains(from.idealType.heightLevel)
                 ) 10 else 0) + // 키
                 (if (from.idealType.ageType.isMatched(from.user.schoolGrade, to.user.schoolGrade)) 10 else -10) + // 나이
-                from.myType.mbti.score(to.myType.mbti) // 성격 (mbti)
+                from.myInfo.mbti.score(to.myInfo.mbti) // 성격 (mbti)
         return score
     }
 

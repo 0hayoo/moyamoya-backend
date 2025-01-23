@@ -47,4 +47,4 @@ enum class Mbti {
 
     // 호환 점수를 반환하는 함수
     fun score(target: Mbti) = compatibilityChart[this.ordinal][target.ordinal]
-}
+} 

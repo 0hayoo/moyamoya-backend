@@ -4,13 +4,13 @@ import com.ohayo.moyamoya.core.user.profile.UserProfileEntity
 
 data class UserProfileRes(
     val userId: Int,
-    val myType: MyTypeDto,
+    val myInfo: MyInfoDto,
     val idealType: IdealTypeDto,
 ) {
     companion object {
         fun of(entity: UserProfileEntity) = UserProfileRes(
             userId = entity.id,
-            myType = MyTypeDto.of(entity.myType),
+            myInfo = MyInfoDto.of(entity.myInfo),
             idealType = IdealTypeDto.of(entity.idealType)
         )
     }

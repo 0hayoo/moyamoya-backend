@@ -4,7 +4,7 @@ enum class FaceType {
     CAT,
     DOG,
     RABBIT,
-    SQUIRTLE,
-    DEAR,
-    HAMSTER
+    BEAR,
+    WOLF,
+    DEAR
 }

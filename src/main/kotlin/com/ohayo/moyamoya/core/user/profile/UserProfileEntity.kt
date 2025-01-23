@@ -14,16 +14,16 @@ class UserProfileEntity(
 
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "messageInterval", column = Column(name = "myTypeMessageInterval")),
-        AttributeOverride(name = "fashionStyle", column = Column(name = "myTypeFashionStyle")),
-        AttributeOverride(name = "hasGlasses", column = Column(name = "myTypeHasGlasses")),
-        AttributeOverride(name = "height", column = Column(name = "myTypeHeight")),
-        AttributeOverride(name = "mbti", column = Column(name = "myTypeMbti")),
-        AttributeOverride(name = "faceType", column = Column(name = "myTypeFaceType")),
-        AttributeOverride(name = "bodyType", column = Column(name = "myTypeBodyType")),
-        AttributeOverride(name = "skinColor", column = Column(name = "myTypeSkinColor")),
+        AttributeOverride(name = "messageInterval", column = Column(name = "myInfoMessageInterval")),
+        AttributeOverride(name = "fashionStyle", column = Column(name = "myInfoFashionStyle")),
+        AttributeOverride(name = "hasGlasses", column = Column(name = "myInfoHasGlasses")),
+        AttributeOverride(name = "height", column = Column(name = "myInfoHeight")),
+        AttributeOverride(name = "mbti", column = Column(name = "myInfoMbti")),
+        AttributeOverride(name = "faceType", column = Column(name = "myInfoFaceType")),
+        AttributeOverride(name = "bodyType", column = Column(name = "myInfoBodyType")),
+        AttributeOverride(name = "skinColor", column = Column(name = "myInfoSkinColor")),
     )
-    val myType: MyTypeEntity,
+    val myInfo: MyInfoEntity,
 
     @Embedded
     @AttributeOverrides(
@@ -40,6 +40,6 @@ class UserProfileEntity(
 ) : BaseEntity()
 
 fun UserProfileEntity.update(req: UpsertUserProfileReq) {
-    myType.update(req.myType)
+    myInfo.update(req.myInfo)
     idealType.update(req.idealType)
 }

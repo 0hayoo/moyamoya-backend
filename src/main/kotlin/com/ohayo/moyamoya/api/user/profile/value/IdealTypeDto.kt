@@ -17,7 +17,7 @@ data class IdealTypeDto(
     companion object {
         fun of(entity: IdealTypeEntity) = IdealTypeDto(
             messageInterval = entity.messageInterval,
-            fashionStyle = entity.fashionStyles,
+            fashionStyle = FashionStyle.listOf(entity.fashionStyle),
             hasGlasses = entity.hasGlasses,
             heightLevel = entity.heightLevel,
             ageType = entity.ageType,

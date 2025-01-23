@@ -6,8 +6,8 @@ import com.ohayo.moyamoya.core.user.profile.HairStyleEntity
 data class HairStyleDto(
     val length: HairLength,
     val isCurly: Boolean,
-    val hasPerm: Boolean?,
-    val hasBang: Boolean?,
+    val hasPerm: Boolean,
+    val hasBang: Boolean,
 ) {
     companion object {
         fun of(entity: HairStyleEntity) = HairStyleDto(

@@ -1,14 +1,15 @@
 package com.ohayo.moyamoya.core.user.profile
 
-import com.ohayo.moyamoya.api.user.profile.value.MyTypeDto
+import com.ohayo.moyamoya.api.user.profile.value.MyInfoDto
 import jakarta.persistence.*
 
 @Embeddable
-class MyTypeEntity(
+class MyInfoEntity(
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var messageInterval: MessageInterval,
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     var fashionStyle: String,
 
     @Column(nullable = false)
@@ -32,10 +33,10 @@ class MyTypeEntity(
     @Column(nullable = false)
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "length", column = Column(name = "myTypeHairStyleLength")),
-        AttributeOverride(name = "isCurly", column = Column(name = "myTypeHairStyleIsCurly")),
-        AttributeOverride(name = "hasPerm", column = Column(name = "myTypeHairStyleHasPerm")),
-        AttributeOverride(name = "hasBang", column = Column(name = "myTypeHairStyleHasBang")),
+        AttributeOverride(name = "length", column = Column(name = "myInfoHairStyleLength")),
+        AttributeOverride(name = "isCurly", column = Column(name = "myInfoHairStyleIsCurly")),
+        AttributeOverride(name = "hasPerm", column = Column(name = "myInfoHairStyleHasPerm")),
+        AttributeOverride(name = "hasBang", column = Column(name = "myInfoHairStyleHasBang")),
     )
     val hairStyle: HairStyleEntity,
     
@@ -44,7 +45,7 @@ class MyTypeEntity(
     var skinColor: SkinColor
 )
 
-fun MyTypeEntity.update(dto: MyTypeDto) {
+fun MyInfoEntity.update(dto: MyInfoDto) {
     messageInterval = dto.messageInterval
     fashionStyle = dto.fashionStyle.toInternalForm()
     hasGlasses = dto.hasGlasses

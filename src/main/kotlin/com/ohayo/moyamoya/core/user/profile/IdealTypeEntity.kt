@@ -6,22 +6,24 @@ import jakarta.persistence.*
 @Embeddable
 class IdealTypeEntity(
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var messageInterval: MessageInterval,
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     var fashionStyle: String,
 
     @Column(nullable = false)
     var hasGlasses: Boolean,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var heightLevel: HeightLevel,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var ageType: AgeType,
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     var personality: String,
 
     @Column(nullable = false)
@@ -45,10 +47,7 @@ class IdealTypeEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var skinColor: SkinColor,
-) {
-    val fashionStyles: List<FashionStyle>
-        get() = fashionStyle.split(FashionStyle.SPLITTER).mapNotNull(FashionStyle::of)
-}
+)
 
 fun IdealTypeEntity.update(dto: IdealTypeDto) {
     messageInterval = dto.messageInterval
