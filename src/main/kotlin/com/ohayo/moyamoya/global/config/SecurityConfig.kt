@@ -1,5 +1,6 @@
 package com.ohayo.moyamoya.global.config
 
+import com.ohayo.moyamoya.core.user.UserRole
 import com.ohayo.moyamoya.global.ErrorResponseSender
 import com.ohayo.moyamoya.global.HttpExceptionFilter
 import com.ohayo.moyamoya.global.jwt.JwtAuthenticationFilter
@@ -32,23 +33,25 @@ class SecurityConfig(
         .formLogin { it.disable() }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
-            it.requestMatchers(
-                // Features
-                "/users/send-code",
-                "/users/verify-code",
-                "/users/sign-up",
-                "/users/refresh",
-                "/users/available-profile-images",
-                
-                "/schools",
+            it
+                .requestMatchers(
+                    // Features
+                    "/users/send-code",
+                    "/users/verify-code",
+                    "/users/sign-up",
+                    "/users/refresh",
+                    "/users/available-profile-images",
 
-                // ETC
-                "test/**",
-                // Swagger
-                "/swagger-ui/**",
-                "/swagger-resources/**",
-                "/v3/api-docs/**",
-            ).permitAll()
+                    "/schools",
+
+                    // ETC
+                    "test/**",
+                    // Swagger
+                    "/swagger-ui/**",
+                    "/swagger-resources/**",
+                    "/v3/api-docs/**",
+                ).permitAll()
+                .requestMatchers("/subjects/**").hasRole(UserRole.ADMIN.name)
                 .anyRequest().authenticated()
         }
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

@@ -35,6 +35,7 @@ object MatchingHelper {
 
             matchingResults.add(
                 MatchingResult(
+                    score = edge.score,
                     male = edge.male,
                     female = edge.female,
                 )

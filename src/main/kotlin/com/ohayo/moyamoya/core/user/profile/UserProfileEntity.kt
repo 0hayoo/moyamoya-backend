@@ -14,27 +14,28 @@ class UserProfileEntity(
 
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "messageInterval", column = Column(name = "myInfoMessageInterval")),
-        AttributeOverride(name = "fashionStyle", column = Column(name = "myInfoFashionStyle")),
-        AttributeOverride(name = "hasGlasses", column = Column(name = "myInfoHasGlasses")),
-        AttributeOverride(name = "height", column = Column(name = "myInfoHeight")),
-        AttributeOverride(name = "mbti", column = Column(name = "myInfoMbti")),
-        AttributeOverride(name = "faceType", column = Column(name = "myInfoFaceType")),
-        AttributeOverride(name = "bodyType", column = Column(name = "myInfoBodyType")),
-        AttributeOverride(name = "skinColor", column = Column(name = "myInfoSkinColor")),
+        AttributeOverride(name = "messageInterval", column = Column(name = "myInfoMessageInterval", nullable = false)),
+        AttributeOverride(name = "fashionStyle", column = Column(name = "myInfoFashionStyle", nullable = false)),
+        AttributeOverride(name = "hasGlasses", column = Column(name = "myInfoHasGlasses", nullable = false)),
+        AttributeOverride(name = "height", column = Column(name = "myInfoHeight", nullable = false)),
+        AttributeOverride(name = "mbti", column = Column(name = "myInfoMbti", nullable = false)),
+        AttributeOverride(name = "faceType", column = Column(name = "myInfoFaceType", nullable = false)),
+        AttributeOverride(name = "bodyType", column = Column(name = "myInfoBodyType", nullable = false)),
+        AttributeOverride(name = "skinColor", column = Column(name = "myInfoSkinColor", nullable = false)),
     )
     val myInfo: MyInfoEntity,
 
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "messageInterval", column = Column(name = "idealTypeMessageInterval")),
-        AttributeOverride(name = "fashionStyle", column = Column(name = "idealTypeFashionStyle")),
-        AttributeOverride(name = "hasGlasses", column = Column(name = "idealTypeHasGlasses")),
-        AttributeOverride(name = "heightLevel", column = Column(name = "idealTypeHeightLevel")),
-        AttributeOverride(name = "personality", column = Column(name = "idealTypePersonality")),
-        AttributeOverride(name = "faceType", column = Column(name = "idealTypeFaceType")),
-        AttributeOverride(name = "bodyType", column = Column(name = "idealTypeBodyType")),
-        AttributeOverride(name = "skinColor", column = Column(name = "idealTypeSkinColor")),
+        AttributeOverride(name = "messageInterval", column = Column(name = "idealTypeMessageInterval", nullable = false)),
+        AttributeOverride(name = "fashionStyle", column = Column(name = "idealTypeFashionStyle", nullable = false)),
+        AttributeOverride(name = "hasGlasses", column = Column(name = "idealTypeHasGlasses", nullable = false)),
+        AttributeOverride(name = "heightLevel", column = Column(name = "idealTypeHeightLevel", nullable = false)),
+        AttributeOverride(name = "ageType", column = Column(name = "idealTypeAgeType", nullable = false)),
+        AttributeOverride(name = "personality", column = Column(name = "idealTypePersonality", nullable = false)),
+        AttributeOverride(name = "faceType", column = Column(name = "idealTypeFaceType", nullable = false)),
+        AttributeOverride(name = "bodyType", column = Column(name = "idealTypeBodyType", nullable = false)),
+        AttributeOverride(name = "skinColor", column = Column(name = "idealTypeSkinColor", nullable = false)),
     )
     val idealType: IdealTypeEntity
 ) : BaseEntity()

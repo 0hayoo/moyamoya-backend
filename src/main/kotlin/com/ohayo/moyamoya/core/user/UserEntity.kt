@@ -31,5 +31,6 @@ class UserEntity(
     val profileImageUrl: String,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     val userRole: UserRole = UserRole.NORMAL
 ): BaseEntity()

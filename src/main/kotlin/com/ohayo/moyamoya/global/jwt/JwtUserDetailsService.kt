@@ -1,4 +1,5 @@
 package com.ohayo.moyamoya.global.jwt
+
 import com.ohayo.moyamoya.core.user.UserRepository
 import com.ohayo.moyamoya.core.user.findByPhoneSafety
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -9,5 +10,5 @@ class JwtUserDetailsService(
     private val userRepository: UserRepository,
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String) =
-        JwtUserDetails(userRepository.findByPhoneSafety(username))
+        JwtUserDetails(user = userRepository.findByPhoneSafety(username))
 }

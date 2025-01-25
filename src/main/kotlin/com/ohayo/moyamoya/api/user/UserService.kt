@@ -97,7 +97,10 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun getMyUserInfo(): UserRes = UserRes.of(sessionHolder.current())
+    fun getUserInfo(id: Int) = UserRes.of(userRepository.findByIdSafety(id))
+
+    @Transactional(readOnly = true)
+    fun getMyUserInfo() = UserRes.of(sessionHolder.current())
 
     fun refresh(req: RefreshReq): Token {
         jwtClient.parseToken(req.refreshToken)

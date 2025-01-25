@@ -1,14 +1,14 @@
-package com.ohayo.moyamoya.api.matching
+package com.ohayo.moyamoya.api.play
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RequestMapping("/matching")
+@RequestMapping("/play")
 @RestController
-class MatchingApi(
-    private val matchingService: MatchingService
+class PlayApi(
+    private val playService: PlayService
 ) {
     @GetMapping("today")
-    fun getTodayMatching() = matchingService.getTodayMatching()
+    fun getTodayPlay() = playService.getTodayPlay()
 }

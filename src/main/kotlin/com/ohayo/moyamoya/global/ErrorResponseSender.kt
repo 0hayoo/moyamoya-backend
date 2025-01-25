@@ -14,10 +14,13 @@ class ErrorResponseSender(
     private val logger: KLogger
 ) {
 
-    fun send(response: HttpServletResponse, customException: CustomException) =
+    fun send(response: HttpServletResponse, customException: CustomException) {
+        println("customException: $customException")
         send(response, customException.status, customException.message)
+    }
 
     fun send(response: HttpServletResponse, status: HttpStatus, message: String? = null) {
+        println(response)
         try {
             response.apply {
                 this.status = status.value()
