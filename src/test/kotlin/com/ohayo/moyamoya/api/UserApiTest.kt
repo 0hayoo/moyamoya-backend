@@ -2,7 +2,9 @@ package com.ohayo.moyamoya.api
 
 import com.ohayo.moyamoya.TestAnnotation
 import com.ohayo.moyamoya.api.user.value.RefreshReq
+import com.ohayo.moyamoya.api.user.value.SendCodeReq
 import com.ohayo.moyamoya.api.user.value.SignUpReq
+import com.ohayo.moyamoya.api.user.value.VerifyCodeReq
 import com.ohayo.moyamoya.common.GlobalState
 import com.ohayo.moyamoya.common.toJson
 import com.ohayo.moyamoya.core.user.Gender
@@ -25,7 +27,10 @@ class UserApiTest {
     @Test
     fun `인증 코드 발송`() {
         mvc.post("/users/send-code") {
-            param("phone", testPhone2)
+            content = SendCodeReq(
+                phone = testPhone2,
+            ).toJson()
+            contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isOk() } }
     }
 
@@ -33,8 +38,11 @@ class UserApiTest {
     fun `인증 코드 발송 후 검증`() {
         this.`인증 코드 발송`()
         mvc.post("/users/verify-code") {
-            param("phone", testPhone2)
-            param("code", TestSmsClient.FAKE_AUTHORIZATION_CODE)
+            content = VerifyCodeReq(
+                phone = testPhone2,
+                code = TestSmsClient.FAKE_AUTHORIZATION_CODE
+            ).toJson()
+            contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
             jsonPath("$.isNewUser", equalTo(true))
@@ -46,8 +54,11 @@ class UserApiTest {
         this.`회원 가입`()
         this.`인증 코드 발송`()
         mvc.post("/users/verify-code") {
-            param("phone", testPhone2)
-            param("code", TestSmsClient.FAKE_AUTHORIZATION_CODE)
+            content = VerifyCodeReq(
+                phone = testPhone2,
+                code = TestSmsClient.FAKE_AUTHORIZATION_CODE
+            ).toJson()
+            contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
             jsonPath("$.isNewUser", equalTo(false))
@@ -58,8 +69,11 @@ class UserApiTest {
     fun `인증 코드 발송 후 검증 - 이상한 코드`() {
         this.`인증 코드 발송`()
         mvc.post("/users/verify-code") {
-            param("phone", testPhone2)
-            param("code", "노영재")
+            content = VerifyCodeReq(
+                phone = testPhone2,
+                code = "노영재"
+            ).toJson()
+            contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isBadRequest() } }
     }
 
