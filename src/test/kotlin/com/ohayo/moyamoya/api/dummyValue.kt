@@ -6,7 +6,7 @@ import com.ohayo.moyamoya.core.school.SchoolType
 import com.ohayo.moyamoya.core.user.UserEntity
 import java.time.LocalDate
 
-val dummySchool = SchoolEntity(
+val testSchool1 = SchoolEntity(
     name = "testName",
     type = SchoolType.HIGH,
     cityName = "testCityName",
@@ -21,12 +21,23 @@ val dummySchool = SchoolEntity(
     officeCode = "testOfficeCode",
 )
 
-val dummyUser = UserEntity(
-    phone = "testPhone",
-    school = dummySchool,
+val testUser1 = UserEntity(
+    phone = "testPhoneUser1",
+    school = testSchool1,
     schoolGrade = 1,
     schoolClass = 1,
-    name = "testName",
+    name = "testName1",
     gender = Gender.MALE,
+    profileImageUrl = "profileImageUrl",
+)
+
+
+val testUser2 = UserEntity(
+    phone = "testPhoneUser2",
+    school = testSchool1,
+    schoolGrade = 2,
+    schoolClass = 2,
+    name = "testName2",
+    gender = Gender.FEMALE,
     profileImageUrl = "profileImageUrl",
 )

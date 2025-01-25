@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("users")
 class UserApi(
-    private val userService: UserService
+    private val userService: UserService,
+    private val userProfileService: UserProfileService
 ) {
     @PostMapping("send-code")
     fun sendCode(@RequestBody @Valid req: SendCodeReq) = userService.sendCode(req)
@@ -31,5 +32,5 @@ class UserApi(
     fun refresh(@RequestBody @Valid req: RefreshReq) = userService.refresh(req)
 
     @GetMapping("available-profile-images")
-    fun getAvailableProfiles() = userService.getAvailableProfileImages()
+    fun getAvailableProfiles() = userProfileService.getAvailableProfileImages()
 }

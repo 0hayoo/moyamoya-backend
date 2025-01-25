@@ -66,7 +66,7 @@ class UserApiTest {
     }
 
     @Test
-    fun `인증 코드 발송 후 검증 - 이상한 코드`() {
+    fun `잘못된 인증 코드 입력 시 인증 코드 검증 실패`() {
         this.`인증 코드 발송`()
         mvc.post("/users/verify-code") {
             content = VerifyCodeReq(
@@ -81,7 +81,7 @@ class UserApiTest {
     fun `회원 가입`() {
         this.`인증 코드 발송 후 검증`()
         mvc.post("/users/sign-up") {
-            val id = GlobalState.school!!.id
+            val id = GlobalState.school.id
             content = SignUpReq(
                 phone = testPhone2,
                 schoolId = id,
@@ -97,10 +97,10 @@ class UserApiTest {
     }
 
     @Test
-    fun `회원 가입 - 이상한 인증 코드`() {
+    fun `잘못된 인증 코드 입력 시 회원 가입 실패`() {
         this.`인증 코드 발송 후 검증`()
         mvc.post("/users/sign-up") {
-            val id = GlobalState.school!!.id
+            val id = GlobalState.school.id
             content = SignUpReq(
                 phone = testPhone2,
                 schoolId = id,
@@ -119,14 +119,14 @@ class UserApiTest {
     fun `토큰 리프레쉬`() {
         mvc.post("/users/refresh") {
             content = RefreshReq(
-                refreshToken = GlobalState.token!!.refreshToken
+                refreshToken = GlobalState.user1Token.refreshToken
             ).toJson()
             contentType = MediaType.APPLICATION_JSON
         }.andExpect { status { isOk() } }
     }
 
     @Test
-    fun `토큰 리프레쉬 - 이상한 토큰`() {
+    fun `잘못된 토큰 입력 시 토큰 리프레쉬 실패`() {
         mvc.post("/users/refresh") {
             content = RefreshReq(
                 refreshToken = "wow"
@@ -138,7 +138,20 @@ class UserApiTest {
     @Test
     fun `내 정보 조회`() {
         mvc.get("/users") {
-            header("Authorization", "Bearer ${GlobalState.token!!.accessToken}")
+            header("Authorization", "Bearer ${GlobalState.user1Token.accessToken}")
         }.andExpect { status { isOk() } }
+    }
+    
+    @Test
+    fun `다른 사람 정보 조회`() {
+        mvc.get("/users/${GlobalState.user2.id}") {
+            header("Authorization", "Bearer ${GlobalState.user1Token.accessToken}")
+        }.andExpect { status { isOk() } }
+    }
+    
+    @Test
+    fun `사용 가능한 프로필 이미지 조회`() {
+        mvc.get("/users/available-profile-images")
+            .andExpect { status { isOk() } }
     }
 }
