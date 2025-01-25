@@ -12,4 +12,5 @@ class SchoolApi(
 ) {
     @GetMapping
     fun getSchools(): List<SchoolRes> = schoolService.getSchools()
+    
 }

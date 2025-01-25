@@ -7,7 +7,7 @@ enum class FashionStyle {
     VINTAGE,
     MODERN,
     CLASSIC,
-    SPORTY, ;
+    SPORTY;
 
     companion object {
         const val SPLITTER = " "

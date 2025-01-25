@@ -8,7 +8,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "tbl_user_profile")
 class UserProfileEntity(
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     @OneToOne
     val user: UserEntity,
 
