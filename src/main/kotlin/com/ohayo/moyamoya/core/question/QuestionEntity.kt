@@ -13,7 +13,7 @@ class QuestionEntity(
     @Column(nullable = false)
     val question: String,
     
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "subject_id", nullable = false)
     @ManyToOne
     val subject: SubjectEntity
 ) : BaseEntity()

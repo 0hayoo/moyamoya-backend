@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.api.subject
 
 import com.ohayo.moyamoya.api.subject.value.CreateSubjectReq
 import com.ohayo.moyamoya.core.question.SubjectEntity
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -18,6 +19,6 @@ class SubjectApi(
 
     @PostMapping
     fun createSubject(
-        @RequestBody req: CreateSubjectReq
+        @RequestBody @Valid req: CreateSubjectReq
     ) = subjectService.createSubject(req)
 }

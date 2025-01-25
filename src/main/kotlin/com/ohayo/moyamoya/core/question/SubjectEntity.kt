@@ -1,13 +1,14 @@
 package com.ohayo.moyamoya.core.question
 
 import com.ohayo.moyamoya.core.BaseEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "tbl_subject")
 class SubjectEntity(
     @Column(nullable = false)
-    val subject: String
-): BaseEntity()
+    val subject: String,
+
+    @OneToMany(mappedBy = "subject", cascade = [CascadeType.ALL])
+    val questions: List<QuestionEntity>
+) : BaseEntity()

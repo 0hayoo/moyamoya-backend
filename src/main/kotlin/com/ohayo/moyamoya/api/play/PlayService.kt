@@ -1,6 +1,6 @@
 package com.ohayo.moyamoya.api.play
 
-import com.ohayo.moyamoya.api.play.value.Play
+import com.ohayo.moyamoya.api.play.value.PlayRes
 import com.ohayo.moyamoya.api.user.profile.core.MatchingHelper
 import com.ohayo.moyamoya.api.user.profile.core.MatchingResult
 import com.ohayo.moyamoya.core.play.*
@@ -22,13 +22,13 @@ class PlayService(
     private val playEventRepository: PlayEventRepository,
     private val playEventQuestionRepository: QuestionRepository
 ) {
-    fun getTodayPlay(): Play {
+    fun getTodayPlay(): PlayRes {
         val user = sessionHolder.current()
 
         // 이미 플레이 중인 게 있다면 반환
         val oldPlay = playRepository.findByNonExpired(user.id)
         if (oldPlay != null) {
-            return Play.of(oldPlay)
+            return PlayRes.of(oldPlay)
         }
 
         val users = userProfileRepository.findBySchoolId(user.school.id)
@@ -44,7 +44,7 @@ class PlayService(
 
         // 오늘 플레이 저장 
         val createdPlay = createPlay(result)
-        return Play.of(createdPlay)
+        return PlayRes.of(createdPlay)
     }
 
     private fun createPlay(result: MatchingResult): PlayEntity {

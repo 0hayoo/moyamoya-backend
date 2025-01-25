@@ -21,8 +21,8 @@ class UserApi(
     @PostMapping("sign-up")
     fun signUp(@RequestBody @Valid req: SignUpReq) = userService.signUp(req)
 
-    @GetMapping("/{id}")
-    fun getUserInfo(@PathVariable id: Int) = userService.getUserInfo(id)
+    @GetMapping("/{userId}")
+    fun getUserInfo(@PathVariable userId: Int) = userService.getUserInfo(userId)
     
     @GetMapping
     fun getMyUserInfo() = userService.getMyUserInfo()
