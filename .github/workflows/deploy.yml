@@ -5,7 +5,7 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,14 +43,16 @@ jobs:
           echo "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" | base64 -d -i - > ./src/main/resources/moyamoya-firebase.json
       - name: Build with Gradle
         run: |
-          ./gradlew bootJar -x test
+          ./gradlew bootJar
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: moyamoya
           path: ./build/libs/moyamoya-0.0.1-SNAPSHOT.jar
-  distribute:
-    needs: build
+      - name: Test
+        run: ./gradlew test
+  cd:
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - name: Download build artifact
@@ -70,10 +72,6 @@ jobs:
           source: "dist/*.jar"
           target: /home/ubuntu/product
           strip_components: 1 # Remove dist path
-  service_restart:
-    needs: distribute
-    runs-on: ubuntu-latest
-    steps:
       - name: EC2 Run
         uses: appleboy/ssh-action@master
         with:

@@ -14,15 +14,27 @@ spring:
         create-drop
     show-sql: true
 discord:
-  webhook-url: ${DISCORD_WEBHOOK_URL}
+  webhook-url: ${DISCORD_WEBHOOK_URL:test}
 neis:
-  api-key: wow
+  api-key: ${NEIS_API_KEY:test}
 jwt:
-  secret-key: 907345e202e27d59d11c02a7736d37a845464a4588edc4132a35062b6a592b65
+  secret-key: ${JWT_SECRET_KEY:907345e202e27d59d11c02a7736d37a845464a4588edc4132a35062b6a592b65}
   expired:
     access: 3_600_000 # 1h
     refresh: 7_884_000_000 # 2M
 coolsms:
-  api-key: test
-  api-secret: test
-  sender-phone: 010
+  api-key: ${COOL_SMS_API_KEY:test}
+  api-secret: ${COOL_SMS_API_SECRET:test}
+  sender-phone: ${COOL_SMS_SENDER_PHONE:test}
+cloud:
+  aws:
+    credentials:
+      accessKey: ${S3_ACCESS_KEY:test}
+      secretKey: ${S3_SECRET_KEY:test}
+    s3-bucket: ${S3_BUCKET:test}
+    stack:
+      auto: false
+    region:
+      static: ${S3_REGION:test}
+dev:
+  secret-key: ${DEV_SECRET_KEY:test}

@@ -1,3 +1,5 @@
+server:
+  port: 1234
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE}
@@ -15,8 +17,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-server:
-  port: 1234
+springdoc:
+  swagger-ui:
+    groups-order: DESC # path, query, body, response 순으로 출력
+    tags-sorter: alpha # 태그를 알파벳 순으로 정렬
+    operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
 discord:
   webhook-url: ${DISCORD_WEBHOOK_URL}
 neis:
@@ -42,8 +47,3 @@ cloud:
       static: ${S3_REGION}
 dev:
   secret-key: ${DEV_SECRET_KEY}
-springdoc:
-  swagger-ui:
-    groups-order: DESC # path, query, body, response 순으로 출력
-    tags-sorter: alpha # 태그를 알파벳 순으로 정렬
-    operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
