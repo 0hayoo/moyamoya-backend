@@ -1,8 +1,8 @@
 package com.ohayo.moyamoya.api.play
 
 import com.ohayo.moyamoya.api.play.value.PlayRes
-import com.ohayo.moyamoya.api.user.profile.core.MatchingHelper
-import com.ohayo.moyamoya.api.user.profile.core.MatchingResult
+import com.ohayo.moyamoya.api.play.core.MatchingHelper
+import com.ohayo.moyamoya.api.play.core.MatchingResult
 import com.ohayo.moyamoya.core.play.*
 import com.ohayo.moyamoya.core.play.PlayEntity
 import com.ohayo.moyamoya.core.question.QuestionRepository

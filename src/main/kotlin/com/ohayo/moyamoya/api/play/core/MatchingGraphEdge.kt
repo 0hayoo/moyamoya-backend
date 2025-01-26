@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.api.user.profile.core
+package com.ohayo.moyamoya.api.play.core
 
 import com.ohayo.moyamoya.core.user.profile.UserProfileEntity
 
