@@ -1,6 +1,7 @@
 package com.ohayo.moyamoya.api.play.event
 
 import com.ohayo.moyamoya.api.play.event.value.AnswerQuestionReq
+import com.ohayo.moyamoya.api.play.event.value.CreatePlayEventReviewReq
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
@@ -23,9 +24,15 @@ class PlayEventApi(
     fun answerQuestion(
         @RequestBody @Valid req: List<AnswerQuestionReq>
     ) = playEventService.answerQuestion(req)
-    
+
     @GetMapping("/{playEventId}/answers")
     fun getAnswers(
         @PathVariable playEventId: Int,
     ) = playEventService.getAnswers(playEventId)
+
+    @PostMapping("/{playEventId}/review")
+    fun reviewEvent(
+        @PathVariable playEventId: Int,
+        @RequestBody @Valid req: CreatePlayEventReviewReq
+    ) = playEventService.reviewEvent(playEventId, req)
 }

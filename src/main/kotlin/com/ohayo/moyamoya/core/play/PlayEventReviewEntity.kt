@@ -1,21 +1,23 @@
-package com.ohayo.moyamoya.core.answer
+package com.ohayo.moyamoya.core.play
 
 import com.ohayo.moyamoya.core.BaseEntity
-import com.ohayo.moyamoya.core.question.QuestionEntity
 import com.ohayo.moyamoya.core.user.UserEntity
 import jakarta.persistence.*
 
 @Entity
 @Table(
-    name = "tbl_answer",
+    name = "tbl_play_event_review",
     uniqueConstraints = [
         UniqueConstraint(
-            name = "UniqueUserAndQuestion",
-            columnNames = ["user_id", "question_id"]
+            name = "UniqueUserAndPlayEvent",
+            columnNames = ["user_id", "play_event_id"]
         )
     ]
 )
-class AnswerEntity(
+class PlayEventReviewEntity(
+    @Column(nullable = false)
+    val star: Int,
+
     @Column(nullable = false, columnDefinition = "TEXT")
     val content: String,
 
@@ -23,7 +25,7 @@ class AnswerEntity(
     @ManyToOne
     val user: UserEntity,
 
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "play_event_id", nullable = false)
     @ManyToOne
-    val question: QuestionEntity
+    val playEvent: PlayEventEntity
 ) : BaseEntity()

@@ -6,8 +6,8 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "tbl_question")
 class QuestionEntity(
-    @Column(nullable = false)
-    val question: String,
+    @Column(nullable = false, columnDefinition = "TEXT")
+    val content: String,
 
     @JoinColumn(name = "subject_id", nullable = false)
     @ManyToOne(cascade = [CascadeType.PERSIST])

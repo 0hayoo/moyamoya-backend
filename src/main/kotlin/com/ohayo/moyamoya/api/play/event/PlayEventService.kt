@@ -5,10 +5,10 @@ import com.ohayo.moyamoya.api.play.event.value.*
 import com.ohayo.moyamoya.core.answer.AnswerEntity
 import com.ohayo.moyamoya.core.answer.AnswerRepository
 import com.ohayo.moyamoya.core.extension.findByIdSafety
-import com.ohayo.moyamoya.core.play.PlayEventRepository
-import com.ohayo.moyamoya.core.play.PlayRepository
-import com.ohayo.moyamoya.core.play.findBySubjectSafety
+import com.ohayo.moyamoya.core.play.*
+import com.ohayo.moyamoya.core.question.QuestionEntity
 import com.ohayo.moyamoya.core.question.QuestionRepository
+import com.ohayo.moyamoya.core.user.UserEntity
 import com.ohayo.moyamoya.global.CustomException
 import com.ohayo.moyamoya.global.UserSessionHolder
 import org.springframework.http.HttpStatus
@@ -24,21 +24,17 @@ class PlayEventService(
     private val playRepository: PlayRepository,
     private val questionRepository: QuestionRepository,
     private val answerRepository: AnswerRepository,
+    private val playEventReviewRepository: PlayEventReviewRepository,
 ) {
     fun getPlayEvents(playId: Int): List<PlayEventRes> {
-        val play = playRepository.findByIdSafety(playId)
-        val user = sessionHolder.current()
-        play.assertJoinedUser(user.id)
-
+        val (_, play) = validatePlay(playId)
         val playEvents = playEventRepository.findByPlay(play)
 
         return playEvents.map(PlayEventRes::of)
     }
 
     fun getQuestions(playEventId: Int): List<QuestionRes> {
-        val user = sessionHolder.current()
-        val playEvent = playEventRepository.findByIdSafety(playEventId)
-        playEvent.assertJoinedUser(user.id)
+        val (_, playEvent) = validatePlayEvent(playEventId)
 
         if (playEvent.eventTime.isAfter(LocalDateTime.now())) {
             throw CustomException(HttpStatus.BAD_REQUEST, "이벤트 오픈 전입니다")
@@ -63,32 +59,62 @@ class PlayEventService(
                 question = question
             )
         }
-        
+
         answerRepository.saveAll(answers)
         return VoidRes()
     }
 
     fun getAnswers(playEventId: Int): AnswersRes {
+        val (_, playEvent) = validatePlayEvent(playEventId)
+        val questions = getQuestions(playEvent)
+
+        val maleAnswers = validateAnswers(playEvent.play.male.user, questions)
+        val femaleAnswers = validateAnswers(playEvent.play.female.user, questions)
+
+        return AnswersRes.of(
+            maleAnswers = maleAnswers,
+            femaleAnswers = femaleAnswers
+        )
+    }
+
+    fun reviewEvent(playEventId: Int, req: CreatePlayEventReviewReq): VoidRes {
+        val (user, playEvent) = validatePlayEvent(playEventId)
+        val questions = getQuestions(playEvent)
+
+        validateAnswers(playEvent.play.male.user, questions)
+        validateAnswers(playEvent.play.female.user, questions)
+
+        playEventReviewRepository.save(req.toEntity(user, playEvent))
+        
+        // todo: add score with req.star
+
+        return VoidRes()
+    }
+
+    private fun validatePlay(playId: Int): Pair<UserEntity, PlayEntity> {
+        val play = playRepository.findByIdSafety(playId)
+        val user = sessionHolder.current()
+        play.assertJoinedUser(user.id)
+
+        return Pair(user, play)
+    }
+
+    private fun validatePlayEvent(playEventId: Int): Pair<UserEntity, PlayEventEntity> {
         val user = sessionHolder.current()
         val playEvent = playEventRepository.findByIdSafety(playEventId)
-        val play = playEvent.play
         playEvent.assertJoinedUser(user.id)
 
-        val questions = questionRepository.findBySubject(playEvent.subject)
-        
-        val maleAnswer = answerRepository.findByUserAndQuestionIn(play.male.user, questions)
-        if (maleAnswer.isEmpty()) {
+        return Pair(user, playEvent)
+    }
+
+    private fun getQuestions(playEvent: PlayEventEntity) =
+        questionRepository.findBySubject(playEvent.subject)
+
+    private fun validateAnswers(user: UserEntity, questions: List<QuestionEntity>): List<AnswerEntity> {
+        val answers = answerRepository.findByUserAndQuestionIn(user, questions)
+        if (answers.isEmpty()) {
             throw CustomException(HttpStatus.BAD_REQUEST, "아직 답변이 완료되지 않았습니다")
         }
-        
-        val femaleAnswer = answerRepository.findByUserAndQuestionIn(play.female.user, questions)
-        if (femaleAnswer.isEmpty()) {
-            throw CustomException(HttpStatus.BAD_REQUEST, "아직 답변이 완료되지 않았습니다")
-        }
-        
-        return AnswersRes.of(
-            maleAnswers = maleAnswer,
-            femaleAnswers = femaleAnswer
-        )
+        return answers
     }
 }

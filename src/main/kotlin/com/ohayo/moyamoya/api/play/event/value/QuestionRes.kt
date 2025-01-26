@@ -9,7 +9,7 @@ data class QuestionRes(
     companion object {
         fun of(entity: QuestionEntity) = QuestionRes(
             id = entity.id,
-            question = entity.question
+            question = entity.content
         )
     }
 }
