@@ -23,4 +23,9 @@ class PlayEventApi(
     fun answerQuestion(
         @RequestBody @Valid req: List<AnswerQuestionReq>
     ) = playEventService.answerQuestion(req)
+    
+    @GetMapping("/{playEventId}/answers")
+    fun getAnswers(
+        @PathVariable playEventId: Int,
+    ) = playEventService.getAnswers(playEventId)
 }

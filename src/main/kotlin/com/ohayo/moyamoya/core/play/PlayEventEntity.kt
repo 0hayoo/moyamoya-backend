@@ -16,7 +16,7 @@ class PlayEventEntity(
     val play: PlayEntity,
 
     @JoinColumn(name = "subject_id", nullable = false)
-    @OneToOne(cascade = [(CascadeType.PERSIST)])
+    @OneToOne(cascade = [CascadeType.PERSIST])
     val subject: SubjectEntity,
 ) : BaseEntity() {
     fun assertJoinedUser(userId: Int) {

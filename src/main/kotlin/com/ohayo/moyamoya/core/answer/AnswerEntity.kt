@@ -6,16 +6,24 @@ import com.ohayo.moyamoya.core.user.UserEntity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "tbl_answer")
+@Table(
+    name = "tbl_answer",
+    uniqueConstraints = [
+        UniqueConstraint(
+            name = "UniqueUserAndQuestion",
+            columnNames = ["user_id", "question_id"]
+        )
+    ]
+)
 class AnswerEntity(
     @Column(nullable = false)
-    val answer: String,
+    val content: String,
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne
     val user: UserEntity,
 
     @JoinColumn(name = "question_id", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToOne
     val question: QuestionEntity
 ) : BaseEntity()
