@@ -17,7 +17,7 @@ class FirebaseConfig(
     @PostConstruct
     fun init() {
         try {
-            val stream = ClassPathResource("moyamoya-firebase.json").inputStream
+            val stream = ClassPathResource("secret/moyamoya-firebase.json").inputStream
             val opt = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(stream))
                 .build()

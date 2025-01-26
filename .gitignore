@@ -41,4 +41,4 @@ out/
 
 .DS_Store
 
-moyamoya-firebase.json
+**/resources/secret/**

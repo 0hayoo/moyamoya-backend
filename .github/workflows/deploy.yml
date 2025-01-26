@@ -35,12 +35,16 @@ jobs:
           dev.secret-key: ${{ secrets.DEV_SECRET_KEY }}
           discord.webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           spring.profiles.active: 'prd'
-      - name: Setting firebase
+      - name: Setting secret resources
         run: |
-          mkdir -p ./src/main/resources
+          mkdir -p ./src/main/resources/secret
+          cd ./src/main/resources/secret
           
-          touch ./src/main/resources/moyamoya-firebase.json
-          echo "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" | base64 -d -i - > ./src/main/resources/moyamoya-firebase.json
+          touch ./moyamoya-firebase.json
+          echo "${{ secrets.MOYAMOYA_FIREBASE_JSON }}" | base64 -d -i - > ./moyamoya-firebase.json
+          
+          touch ./moyamoya-googlespreadsheets.json
+          echo "${{ secrets.MOYAMOYA_GOOGLE_SPREAD_SHEETS_JSON }}" | base64 -d -i - > ./moyamoya-googlespreadsheets.json
       - name: Build with Gradle
         run: |
           ./gradlew bootJar

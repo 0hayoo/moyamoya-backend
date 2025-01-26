@@ -21,9 +21,11 @@ repositories {
 
 dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
-
     
     api("com.google.firebase:firebase-admin:9.3.0")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20210629-1.32.1")
+    implementation("com.google.api-client:google-api-client:1.34.1")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.16.0")
     
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
