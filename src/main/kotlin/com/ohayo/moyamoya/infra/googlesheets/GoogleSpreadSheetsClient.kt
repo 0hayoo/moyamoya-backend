@@ -47,9 +47,10 @@ class GoogleSpreadSheetsClient /*: CommandLineRunner*/ {
         }.run {
             ListUtil.transpose(this)
         }.mapNotNull { row ->
+            println(row)
             GSSSubjectRes(
-                title = row.drop(1).firstOrNull() ?: return@mapNotNull null,
-                questions = row.map { cell ->
+                title = row.firstOrNull() ?: return@mapNotNull null,
+                questions = row.slice(1..<row.size).map { cell ->
                     GSSQuestionRes(
                         question = cell
                     )

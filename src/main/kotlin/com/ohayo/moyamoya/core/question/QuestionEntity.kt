@@ -11,7 +11,7 @@ class QuestionEntity(
     val question: String,
     
     @JoinColumn(name = "answer_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val answer: AnswerEntity? = null,
 
     @JoinColumn(name = "subject_id", nullable = false)

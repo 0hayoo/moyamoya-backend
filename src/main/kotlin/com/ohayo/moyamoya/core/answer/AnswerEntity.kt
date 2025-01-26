@@ -16,6 +16,6 @@ class AnswerEntity(
     val user: UserEntity,
 
     @JoinColumn(name = "question_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val question: QuestionEntity
 ) : BaseEntity()
