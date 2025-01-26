@@ -1,11 +1,10 @@
-package com.ohayo.moyamoya.api.subject.value
+package com.ohayo.moyamoya.infra.googlesheets.value
 
+import com.ohayo.moyamoya.api.play.event.value.QuestionRes
 import com.ohayo.moyamoya.core.question.QuestionEntity
 import com.ohayo.moyamoya.core.question.SubjectEntity
-import jakarta.validation.constraints.NotNull
 
-data class CreateQuestionReq(
-    @field:NotNull
+data class GSSQuestionRes(
     val question: String
 ) {
     fun toEntity(subject: SubjectEntity) = QuestionEntity(

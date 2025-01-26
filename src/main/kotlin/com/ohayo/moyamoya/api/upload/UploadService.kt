@@ -7,10 +7,12 @@ import com.ohayo.moyamoya.global.CustomException
 import com.ohayo.moyamoya.infra.s3.S3Properties
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
 
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class UploadService(
     private val amazonS3: AmazonS3,
     private val s3Properties: S3Properties

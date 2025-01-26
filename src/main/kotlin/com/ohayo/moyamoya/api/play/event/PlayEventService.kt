@@ -4,24 +4,26 @@ import com.ohayo.moyamoya.api.common.VoidRes
 import com.ohayo.moyamoya.api.play.event.value.AnswerQuestionReq
 import com.ohayo.moyamoya.api.play.event.value.PlayEventRes
 import com.ohayo.moyamoya.api.play.event.value.QuestionRes
-import com.ohayo.moyamoya.core.answer.AnswerEntity
 import com.ohayo.moyamoya.core.answer.AnswerRepository
 import com.ohayo.moyamoya.core.extension.findByIdSafety
 import com.ohayo.moyamoya.core.play.PlayEventRepository
 import com.ohayo.moyamoya.core.play.PlayRepository
+import com.ohayo.moyamoya.core.play.findBySubjectSafety
 import com.ohayo.moyamoya.core.question.QuestionRepository
 import com.ohayo.moyamoya.core.question.SubjectRepository
 import com.ohayo.moyamoya.global.UserSessionHolder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class PlayEventService(
     private val playEventRepository: PlayEventRepository,
     private val sessionHolder: UserSessionHolder,
     private val playRepository: PlayRepository,
-    private val subjectRepository: SubjectRepository,
     private val questionRepository: QuestionRepository,
-    private val answerRepository: AnswerRepository
+    private val answerRepository: AnswerRepository,
+    private val subjectRepository: SubjectRepository
 ) {
     fun getPlayEvents(playId: Int): List<PlayEventRes> {
         val play = playRepository.findByIdSafety(playId)
@@ -37,24 +39,27 @@ class PlayEventService(
         val user = sessionHolder.current()
         val playEvent = playEventRepository.findByIdSafety(playEventId)
         playEvent.assertJoinedUser(user.id)
-
-        return playEvent.subject.questions.map(QuestionRes::of)
+        
+        return questionRepository.findBySubject(playEvent.subject)
+            .map(QuestionRes::of)
     }
 
-    fun answerQuestion(playEventId: Int, questionId: Int, req: AnswerQuestionReq): VoidRes {
+    // todo 성능
+    fun answerQuestion(req: List<AnswerQuestionReq>): VoidRes {
         val user = sessionHolder.current()
-        val playEvent = playEventRepository.findByIdSafety(playEventId)
-        playEvent.assertJoinedUser(user.id)
 
-        answerRepository.save(
-            AnswerEntity(
-                answer = req.answer,
+        val answers = req.map {
+            val question = questionRepository.findByIdSafety(it.questionId)
+            val playEvent = playEventRepository.findBySubjectSafety(question.subject)
+            playEvent.assertJoinedUser(user.id)
+
+            it.toEntity(
                 user = sessionHolder.current(),
-                playEvent = playEvent,
-                question = questionRepository.findByIdSafety(questionId)
+                question = question
             )
-        )
+        }
         
+        answerRepository.saveAll(answers)
         return VoidRes()
     }
 }

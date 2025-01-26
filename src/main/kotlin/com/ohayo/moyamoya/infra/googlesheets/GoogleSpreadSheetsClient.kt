@@ -5,17 +5,20 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.auth.http.HttpCredentialsAdapter
 import com.google.auth.oauth2.GoogleCredentials
-import org.springframework.boot.CommandLineRunner
+import com.ohayo.moyamoya.common.ListUtil
+import com.ohayo.moyamoya.infra.googlesheets.value.GSSQuestionRes
+import com.ohayo.moyamoya.infra.googlesheets.value.GSSSubjectRes
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 
 @Component
-class GoogleSpreadSheetsClient : CommandLineRunner {
-    override fun run(vararg args: String?) {
-        readData().forEach {
-            println(it)
-        }
-    }
+class GoogleSpreadSheetsClient /*: CommandLineRunner*/ {
+//    override fun run(vararg args: String?) {
+//        readSubjects().forEach {
+//            println("Subject: ${it.subject}")
+//            println(it.questions.joinToString(", ") { cell -> cell.question })
+//        }
+//    }
 
     private val sheets: Sheets = run {
         val credentials: GoogleCredentials =
@@ -30,10 +33,27 @@ class GoogleSpreadSheetsClient : CommandLineRunner {
             .build()
     }
 
-    fun readData(): List<List<Any>> {
-        val response = sheets.spreadsheets().values()
-            .get("1BmPBnpz8soA82pXCypGrWNbz3MkKTMdEWnJa_TXPG00", "A1:B10")
-            .execute()
-        return response.getValues() ?: emptyList()
-    }
+    fun readSubjects(): List<GSSSubjectRes> = sheets.spreadsheets().values()
+        .get("1BmPBnpz8soA82pXCypGrWNbz3MkKTMdEWnJa_TXPG00", "A1:AA50")
+        .execute()
+        .getValues()
+        .run { this ?: emptyList() }
+        .mapNotNull { row ->
+            row.mapNotNull row@{
+                val value = it.toString()
+                if (value.isEmpty()) return@row null
+                value
+            }
+        }.run {
+            ListUtil.transpose(this)
+        }.mapNotNull { row ->
+            GSSSubjectRes(
+                title = row.drop(1).firstOrNull() ?: return@mapNotNull null,
+                questions = row.map { cell ->
+                    GSSQuestionRes(
+                        question = cell
+                    )
+                }
+            )
+        }
 }

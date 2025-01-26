@@ -7,8 +7,5 @@ import jakarta.persistence.*
 @Table(name = "tbl_subject")
 class SubjectEntity(
     @Column(nullable = false)
-    val subject: String,
-
-    @OneToMany(mappedBy = "subject", cascade = [CascadeType.ALL])
-    val questions: List<QuestionEntity>
+    val title: String,
 ) : BaseEntity()

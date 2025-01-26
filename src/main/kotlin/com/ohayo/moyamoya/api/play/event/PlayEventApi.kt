@@ -19,10 +19,8 @@ class PlayEventApi(
         @PathVariable playEventId: Int,
     ) = playEventService.getQuestions(playEventId)
 
-    @PostMapping("/{playEventId}/questions/{questionId}/answer")
+    @PostMapping("/questions/answer")
     fun answerQuestion(
-        @PathVariable playEventId: Int,
-        @PathVariable questionId: Int,
-        @RequestBody @Valid req: AnswerQuestionReq
-    ) = playEventService.answerQuestion(playEventId, questionId, req)
+        @RequestBody @Valid req: List<AnswerQuestionReq>
+    ) = playEventService.answerQuestion(req)
 }

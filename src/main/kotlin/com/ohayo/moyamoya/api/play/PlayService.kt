@@ -6,12 +6,15 @@ import com.ohayo.moyamoya.api.user.profile.core.MatchingResult
 import com.ohayo.moyamoya.core.play.*
 import com.ohayo.moyamoya.core.play.PlayEntity
 import com.ohayo.moyamoya.core.question.QuestionRepository
+import com.ohayo.moyamoya.core.question.SubjectEntity
 import com.ohayo.moyamoya.core.user.profile.UserProfileRepository
 import com.ohayo.moyamoya.global.CustomException
 import com.ohayo.moyamoya.global.UserSessionHolder
+import com.ohayo.moyamoya.infra.googlesheets.GoogleSpreadSheetsClient
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
@@ -20,7 +23,8 @@ class PlayService(
     private val playRepository: PlayRepository,
     private val sessionHolder: UserSessionHolder,
     private val playEventRepository: PlayEventRepository,
-    private val playEventQuestionRepository: QuestionRepository
+    private val questionRepository: QuestionRepository,
+    private val googleSpreadSheetsClient: GoogleSpreadSheetsClient
 ) {
     fun getTodayPlay(): PlayRes {
         val user = sessionHolder.current()
@@ -55,11 +59,42 @@ class PlayService(
                 score = result.score,
             )
         )
-        
-//        val questions = playEventQuestionRepository.findRandom(3)
-//        
-//        val playEvent = playEventRepository.saveAll()
-        
+
+        // -- 질문 이벤트 생성 --
+        val now = LocalDateTime.now()
+
+        // 1시가 지났는지 확인 (현재 시간이 오전 1시 이후이면 오늘로, 아니면 어제로 설정)
+        val baseTime = if (now.hour >= 1) now else now.minusDays(1)
+
+        val subjectEventTimes = listOf(
+            baseTime.withHour(8).withMinute(0).withSecond(0).withNano(0),
+            baseTime.withHour(12).withMinute(30).withSecond(0).withNano(0), // 오전 12시 반 - 점심시간
+            baseTime.withHour(16).withMinute(0).withSecond(0).withNano(0), // 오후 4시 - 하교 시간 or 자습 시간
+            baseTime.withHour(20).withMinute(0).withSecond(0).withNano(0) // 오후 8시 - 귀가 시간
+        )
+
+        val gssSubjects = googleSpreadSheetsClient.readSubjects()
+            .shuffled()
+            .take(4) // 질문 4개
+
+        val subjects = gssSubjects.map { gssSubject ->
+            val subject = SubjectEntity(title = gssSubject.title)
+            val questions = gssSubject.questions.map { it.toEntity(subject) }
+            questionRepository.saveAll(questions)
+                .first()
+                .subject
+        }
+
+        val events = subjects.mapIndexed { index, subject ->
+            val eventTime = subjectEventTimes[index]
+            PlayEventEntity(
+                eventTime = eventTime,
+                play = play,
+                subject = subject
+            )
+        }
+        playEventRepository.saveAll(events)
+
         return play
     }
 }

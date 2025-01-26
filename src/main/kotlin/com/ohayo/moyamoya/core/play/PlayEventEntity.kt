@@ -2,11 +2,7 @@ package com.ohayo.moyamoya.core.play
 
 import com.ohayo.moyamoya.core.BaseEntity
 import com.ohayo.moyamoya.core.question.SubjectEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -20,7 +16,7 @@ class PlayEventEntity(
     val play: PlayEntity,
 
     @JoinColumn(name = "subject_id", nullable = false)
-    @ManyToOne
+    @OneToOne(cascade = [(CascadeType.PERSIST)])
     val subject: SubjectEntity,
 ) : BaseEntity() {
     fun assertJoinedUser(userId: Int) {

@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.infra.discord
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import org.springframework.web.context.request.ServletWebRequest
@@ -11,6 +12,7 @@ import java.io.StringWriter
 import java.time.LocalDateTime
 
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class DiscordErrorSendService(
     @Qualifier("discord")
     private val restClient: RestClient

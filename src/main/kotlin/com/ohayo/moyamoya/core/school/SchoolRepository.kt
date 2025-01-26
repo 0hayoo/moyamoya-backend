@@ -30,5 +30,5 @@ interface SchoolRepository : JpaRepository<SchoolEntity, Int> {
     GROUP BY s.id
     """
     )
-    fun findAllWithStudentCount(): List<SchoolRes>
+    fun findAllResWithStudentCount(): List<SchoolRes>
 }
