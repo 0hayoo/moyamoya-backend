@@ -86,7 +86,10 @@ class PlayEventService(
 
         playEventReviewRepository.save(req.toEntity(user, playEvent))
         
-        // todo: add score with req.star
+        // add score
+        val play = playEvent.play
+        play.addScore(req.star, user)
+        playRepository.save(play)
 
         return VoidRes()
     }
