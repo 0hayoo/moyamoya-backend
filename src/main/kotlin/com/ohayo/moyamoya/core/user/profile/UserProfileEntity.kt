@@ -21,11 +21,11 @@ class UserProfileEntity(
     val user: UserEntity,
 
     @JoinColumn(name = "my_info_id", nullable = false)
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     val myInfo: MyInfoEntity,
 
     @JoinColumn(name = "ideal_type_id", nullable = false)
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     val idealType: IdealTypeEntity
 ) : BaseEntity() {
     fun update(req: UpsertUserProfileReq) {

@@ -14,7 +14,7 @@ class PersonalityEntity(
     @Enumerated(EnumType.STRING)
     val toMBTI: PersonalityToMBTI,
     
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val content: String
 ) : BaseEntity()
 
