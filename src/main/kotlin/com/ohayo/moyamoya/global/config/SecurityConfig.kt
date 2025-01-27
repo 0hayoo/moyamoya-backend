@@ -41,6 +41,7 @@ class SecurityConfig(
                     "/users/sign-up",
                     "/users/refresh",
                     "/users/available-profile-images",
+                    "/users/profile/available-personalities",
 
                     "/schools",
 
