@@ -38,7 +38,7 @@ class DiscordErrorSendService(
                             + "\n"
                             + "### 📄 Stack Trace\n"
                             + "```\n"
-                            + getStackTrace(e).substring(0, 200)
+                            + getStackTrace(e).substring(0, 2000)
                             + "\n```"
                 )
             )
