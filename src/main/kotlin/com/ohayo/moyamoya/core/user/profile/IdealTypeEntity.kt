@@ -23,8 +23,11 @@ class IdealTypeEntity(
     @Enumerated(EnumType.STRING)
     var ageType: AgeType,
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    var personality: String,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "tbl_user_profile_ideal_type_personality"
+    )
+    var personalities: List<String>,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,7 +57,7 @@ fun IdealTypeEntity.update(dto: IdealTypeDto) {
     fashionStyle = dto.fashionStyle.toInternalForm()
     hasGlasses = dto.hasGlasses
     heightLevel = dto.heightLevel
-    personality = dto.personality
+    personalities = dto.personalities
     faceType = dto.faceType
     bodyType = dto.bodyType
     hairStyle.update(dto.hairStyle)
