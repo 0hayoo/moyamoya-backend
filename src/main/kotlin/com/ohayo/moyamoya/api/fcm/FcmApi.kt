@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("fcm")
-class FcmController(
+class FcmApi(
     private val fcmService: FcmService
 ) {
     @PostMapping

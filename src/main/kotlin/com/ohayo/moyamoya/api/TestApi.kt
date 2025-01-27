@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("test")
-class TestController(
+class TestApi(
     private val logger: KLogger,
     private val userRepository: UserRepository,
     private val jwtClient: JwtClient,
