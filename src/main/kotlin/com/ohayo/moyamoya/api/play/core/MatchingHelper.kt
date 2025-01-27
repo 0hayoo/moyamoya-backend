@@ -69,7 +69,7 @@ object MatchingHelper {
                     from.idealType.heightLevel != HeightLevel.ANY &&
                     idealTypeHeightLevels.contains(from.idealType.heightLevel)
                 ) 10 else 0) + // 키
-                (if (from.idealType.ageType.isMatched(from.user.schoolGrade, to.user.schoolGrade)) 10 else -10) + // 나이
+                from.idealType.ageType.score(from.user.schoolGrade, to.user.schoolGrade) + // 나이
                 from.myInfo.mbti.score(to.myInfo.mbti) // 성격 (mbti)
         return score
     }
