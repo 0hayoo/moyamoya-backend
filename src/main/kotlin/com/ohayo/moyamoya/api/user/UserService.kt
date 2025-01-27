@@ -104,6 +104,10 @@ class UserService(
             userRepository.findByPhoneSafety(phone)
         }
 
-        return jwtClient.generate(user)
+        val generatedToken = jwtClient.generate(user)
+        return Token(
+            accessToken = generatedToken.accessToken,
+            refreshToken = req.refreshToken
+        )
     }
 }
