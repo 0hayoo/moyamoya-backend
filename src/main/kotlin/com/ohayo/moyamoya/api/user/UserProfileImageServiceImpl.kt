@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service
 
 @Service
 @Profile("!test")
-class UserProfileServiceImpl(
+class UserProfileImageServiceImpl(
     private val amazonS3: AmazonS3,
     private val s3Properties: S3Properties
-) : UserProfileService {
+) : UserProfileImageService {
     override fun getAvailableProfileImages(): List<String> {
         val urls = arrayListOf<String>()
 

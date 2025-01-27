@@ -7,7 +7,7 @@ data class MyInfoDto(
     val fashionStyle: List<FashionStyle>,
     val hasGlasses: Boolean,
     val height: Int,
-    val mbti: Mbti,
+    val mbti: MBTI,
     val faceType: FaceType,
     val bodyType: BodyType,
     val hairStyle: HairStyleDto,

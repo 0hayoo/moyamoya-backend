@@ -1,9 +1,11 @@
 package com.ohayo.moyamoya.core.user.profile
 
-import com.ohayo.moyamoya.api.user.profile.value.IdealTypeDto
+import com.ohayo.moyamoya.api.user.profile.value.IdealTypeReq
+import com.ohayo.moyamoya.core.BaseEntity
 import jakarta.persistence.*
 
-@Embeddable
+@Entity
+@Table(name = "tbl_ideal_type")
 class IdealTypeEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -22,12 +24,6 @@ class IdealTypeEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var ageType: AgeType,
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-        name = "tbl_user_profile_ideal_type_personality"
-    )
-    var personalities: List<String>,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -50,16 +46,17 @@ class IdealTypeEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var skinColor: SkinColor,
-)
-
-fun IdealTypeEntity.update(dto: IdealTypeDto) {
-    messageInterval = dto.messageInterval
-    fashionStyle = dto.fashionStyle.toInternalForm()
-    hasGlasses = dto.hasGlasses
-    heightLevel = dto.heightLevel
-    personalities = dto.personalities
-    faceType = dto.faceType
-    bodyType = dto.bodyType
-    hairStyle.update(dto.hairStyle)
-    skinColor = dto.skinColor
+) : BaseEntity() {
+    fun update(dto: IdealTypeReq) {
+        messageInterval = dto.messageInterval
+        fashionStyle = dto.fashionStyle.toInternalForm()
+        hasGlasses = dto.hasGlasses
+        heightLevel = dto.heightLevel
+        // todo
+//        personalities = dto.personalities
+        faceType = dto.faceType
+        bodyType = dto.bodyType
+        hairStyle.update(dto.hairStyle)
+        skinColor = dto.skinColor
+    }
 }

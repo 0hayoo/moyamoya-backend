@@ -4,8 +4,12 @@ import com.ohayo.moyamoya.core.user.Gender
 import com.ohayo.moyamoya.core.user.profile.*
 import com.ohayo.moyamoya.global.CustomException
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 
-object MatchingHelper {
+@Component
+class MatchingHelper(
+    private val idealTypeHasPersonalityRepository: IdealTypeHasPersonalityRepository
+) {
     fun matchUsers(users: List<UserProfileEntity>): List<MatchingResult> {
         val graph = arrayListOf<MatchingGraphEdge>()
         val males = users.filter { it.user.gender == Gender.MALE }
@@ -53,6 +57,8 @@ object MatchingHelper {
     }
 
     private fun getScore(from: UserProfileEntity, to: UserProfileEntity, heights: List<Int>): Int {
+        val personalities = idealTypeHasPersonalityRepository.findByIdealType(from.idealType)
+
         val idealTypeHeightLevels = getHeightLevels(height = to.myInfo.height, heights = heights)
         val score = (if (from.idealType.messageInterval == to.myInfo.messageInterval) 10 else -10) +  // 연락 텀
                 (FashionStyle.listOf(from.idealType.fashionStyle)
@@ -70,7 +76,10 @@ object MatchingHelper {
                     idealTypeHeightLevels.contains(from.idealType.heightLevel)
                 ) 10 else 0) + // 키
                 from.idealType.ageType.score(from.user.schoolGrade, to.user.schoolGrade) + // 나이
-                from.myInfo.mbti.score(to.myInfo.mbti) // 성격 (mbti)
+                from.myInfo.mbti.score(to.myInfo.mbti) + // 성격 (mbti)
+                personalities.sumOf {
+                    to.myInfo.mbti.isMatchPersonality(it.personality)
+                }
         return score
     }
 

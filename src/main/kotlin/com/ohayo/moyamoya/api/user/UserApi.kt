@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("users")
 class UserApi(
     private val userService: UserService,
-    private val userProfileService: UserProfileService
+    private val userProfileService: UserProfileImageService
 ) {
     @PostMapping("send-code")
     fun sendCode(@RequestBody @Valid req: SendCodeReq) = userService.sendCode(req)

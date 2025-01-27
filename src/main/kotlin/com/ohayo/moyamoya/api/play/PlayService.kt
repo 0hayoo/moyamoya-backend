@@ -24,7 +24,8 @@ class PlayService(
     private val sessionHolder: UserSessionHolder,
     private val playEventRepository: PlayEventRepository,
     private val questionRepository: QuestionRepository,
-    private val googleSpreadSheetsClient: GoogleSpreadSheetsClient
+    private val googleSpreadSheetsClient: GoogleSpreadSheetsClient,
+    private val matchingHelper: MatchingHelper
 ) {
     fun getTodayPlay(): PlayRes {
         val user = sessionHolder.current()
@@ -36,7 +37,7 @@ class PlayService(
         }
 
         val users = userProfileRepository.findBySchoolId(user.school.id)
-        val result = MatchingHelper.matchUsers(users)
+        val result = matchingHelper.matchUsers(users)
             .let { it.forEach(::println);it }.firstOrNull {
                 it.male.user.id == user.id || it.female.user.id == user.id
             }

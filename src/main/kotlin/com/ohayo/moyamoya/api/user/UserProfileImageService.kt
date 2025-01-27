@@ -1,5 +1,5 @@
 package com.ohayo.moyamoya.api.user
 
-interface UserProfileService {
+interface UserProfileImageService {
     fun getAvailableProfileImages(): List<String>
 }

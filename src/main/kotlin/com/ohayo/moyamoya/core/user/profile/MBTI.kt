@@ -1,22 +1,24 @@
 package com.ohayo.moyamoya.core.user.profile
 
-enum class Mbti {
-    INFP,
-    ENFP,
-    INFJ,
-    ENFJ,
-    INTJ,
-    ENTJ,
-    INTP,
-    ENTP,
-    ISFP,
-    ESFP,
-    ISTP,
-    ESTP,
-    ISFJ,
-    ESFJ,
-    ISTJ,
-    ESTJ;
+enum class MBTI(
+    val personalityToMBTI: PersonalityToMBTI
+) {
+    INFP(PersonalityToMBTI.NF),
+    ENFP(PersonalityToMBTI.NF),
+    INFJ(PersonalityToMBTI.NF),
+    ENFJ(PersonalityToMBTI.NF),
+    INTJ(PersonalityToMBTI.NT),
+    ENTJ(PersonalityToMBTI.NT),
+    INTP(PersonalityToMBTI.NT),
+    ENTP(PersonalityToMBTI.NT),
+    ISFP(PersonalityToMBTI.SF),
+    ESFP(PersonalityToMBTI.SF),
+    ISTP(PersonalityToMBTI.ST),
+    ESTP(PersonalityToMBTI.ST),
+    ISFJ(PersonalityToMBTI.NF),
+    ESFJ(PersonalityToMBTI.NF),
+    ISTJ(PersonalityToMBTI.ST),
+    ESTJ(PersonalityToMBTI.ST);
 
     // MBTI 간의 호환 점수를 나타내는 2차원 배열
     companion object {
@@ -46,5 +48,8 @@ enum class Mbti {
     }
 
     // 호환 점수를 반환하는 함수
-    fun score(target: Mbti) = compatibilityChart[this.ordinal][target.ordinal]
+    fun score(target: MBTI) = compatibilityChart[this.ordinal][target.ordinal]
+
+    fun isMatchPersonality(personality: PersonalityEntity) =
+        if (personalityToMBTI == personality.toMBTI) 5 else -5
 } 

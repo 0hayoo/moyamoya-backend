@@ -1,9 +1,11 @@
 package com.ohayo.moyamoya.core.user.profile
 
 import com.ohayo.moyamoya.api.user.profile.value.MyInfoDto
+import com.ohayo.moyamoya.core.BaseEntity
 import jakarta.persistence.*
 
-@Embeddable
+@Entity
+@Table(name = "tbl_my_info")
 class MyInfoEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -20,7 +22,7 @@ class MyInfoEntity(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var mbti: Mbti,
+    var mbti: MBTI,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -39,20 +41,20 @@ class MyInfoEntity(
         AttributeOverride(name = "hasBang", column = Column(name = "myInfoHairStyleHasBang")),
     )
     val hairStyle: HairStyleEntity,
-    
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var skinColor: SkinColor
-)
-
-fun MyInfoEntity.update(dto: MyInfoDto) {
-    messageInterval = dto.messageInterval
-    fashionStyle = dto.fashionStyle.toInternalForm()
-    hasGlasses = dto.hasGlasses
-    height = dto.height
-    mbti = dto.mbti
-    faceType = dto.faceType
-    bodyType = dto.bodyType
-    hairStyle.update(dto.hairStyle)
-    skinColor = dto.skinColor
+) : BaseEntity() {
+    fun update(dto: MyInfoDto) {
+        messageInterval = dto.messageInterval
+        fashionStyle = dto.fashionStyle.toInternalForm()
+        hasGlasses = dto.hasGlasses
+        height = dto.height
+        mbti = dto.mbti
+        faceType = dto.faceType
+        bodyType = dto.bodyType
+        hairStyle.update(dto.hairStyle)
+        skinColor = dto.skinColor
+    }
 }

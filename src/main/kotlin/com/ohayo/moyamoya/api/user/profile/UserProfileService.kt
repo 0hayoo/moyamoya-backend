@@ -1,13 +1,11 @@
 package com.ohayo.moyamoya.api.user.profile
 
 import com.ohayo.moyamoya.api.common.VoidRes
+import com.ohayo.moyamoya.api.user.profile.value.PersonalityRes
 import com.ohayo.moyamoya.api.user.profile.value.UpsertUserProfileReq
-import com.ohayo.moyamoya.core.user.profile.HeightLevel
-import com.ohayo.moyamoya.core.user.profile.UserProfileRepository
-import com.ohayo.moyamoya.core.user.profile.update
-import com.ohayo.moyamoya.global.CustomException
+import com.ohayo.moyamoya.api.user.profile.value.UserProfileRes
+import com.ohayo.moyamoya.core.user.profile.*
 import com.ohayo.moyamoya.global.UserSessionHolder
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,24 +13,43 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(rollbackFor = [Exception::class])
 class UserProfileService(
     private val userProfileRepository: UserProfileRepository,
-    private val sessionHolder: UserSessionHolder
+    private val sessionHolder: UserSessionHolder,
+    private val idealTypeHasPersonalityRepository: IdealTypeHasPersonalityRepository,
+    private val personalityRepository: PersonalityRepository
 ) {
     @Transactional(readOnly = true)
-    fun getMyUserProfileInfo() = userProfileRepository.findByUser(user = sessionHolder.current())
-        ?: throw CustomException(HttpStatus.NOT_FOUND, "유저 프로필을 찾을 수 없습니다")
-    
+    fun getMyUserProfileInfo(): UserProfileRes {
+        val userProfile = userProfileRepository.findByUserSafety(user = sessionHolder.current())
+        val personalities = idealTypeHasPersonalityRepository.findByIdealType(userProfile.idealType)
+        return UserProfileRes.of(userProfile, personalities.map { it.personality })
+    }
+
+    // todo personality 저장
     fun upsertUserProfile(req: UpsertUserProfileReq): VoidRes {
         val user = sessionHolder.current()
-        val userProfile = userProfileRepository.findByUser(user)
+        var userProfile = userProfileRepository.findByUser(user)
 
         if (userProfile == null) {
             val entity = req.toEntity(user)
-            userProfileRepository.save(entity)
+            userProfile = userProfileRepository.save(entity)
         } else {
             userProfile.update(req)
-            userProfileRepository.save(userProfile)
+            userProfile = userProfileRepository.save(userProfile)
+
+            idealTypeHasPersonalityRepository.removeByIdealType(userProfile.idealType)
         }
+
+        idealTypeHasPersonalityRepository.saveAll(
+            personalityRepository.findByIdIn(req.idealType.personalities).map {
+                IdealTypeHasPersonalityEntity(
+                    idealType = userProfile.idealType,
+                    personality = it
+                )
+            }
+        )
 
         return VoidRes()
     }
+
+    fun getAvailablePersonalities() = personalityRepository.findAll().map(PersonalityRes::of)
 }
