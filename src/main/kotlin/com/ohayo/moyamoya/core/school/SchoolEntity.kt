@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.core.school
 
 import com.ohayo.moyamoya.core.BaseEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
 
 @Entity
@@ -39,9 +40,10 @@ class SchoolEntity(
     val officeCode: String,
 
     @Column(nullable = false)
-    var waitingCount: Long
+    @ColumnDefault("0")
+    var waitingCount: Long = 0
 ): BaseEntity() {
     fun modifyWaitingCount(waitingCount: Long) {
-        this.waitingCount += waitingCount
+        this.waitingCount = this.waitingCount.plus(waitingCount)
     }
 }

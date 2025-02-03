@@ -12,7 +12,7 @@ class PlayEventApi(
 ) {
     @GetMapping
     fun getPlayEvents(
-        @RequestParam playId: Int
+        @RequestParam playId: Int,
     ) = playEventService.getPlayEvents(playId = playId)
 
     @GetMapping("/{playEventId}/questions")

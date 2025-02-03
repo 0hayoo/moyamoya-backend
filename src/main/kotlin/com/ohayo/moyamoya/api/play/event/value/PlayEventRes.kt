@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class PlayEventRes(
     val id: Int,
     val eventTime: LocalDateTime,
-    val subject: SubjectRes,
+    val subject: SubjectRes
 ) {
     companion object {
         fun of(entity: PlayEventEntity) = PlayEventRes(
