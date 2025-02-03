@@ -44,6 +44,7 @@ class SecurityConfig(
                     "/users/profile/available-personalities",
 
                     "/schools",
+                    "/schools/waiting",
 
                     // ETC
                     "test/**",
