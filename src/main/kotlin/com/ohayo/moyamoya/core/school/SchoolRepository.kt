@@ -1,6 +1,7 @@
 package com.ohayo.moyamoya.core.school
 
 import com.ohayo.moyamoya.api.school.value.SchoolRes
+import com.ohayo.moyamoya.api.school.value.SchoolWaitingCountRes
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -31,4 +32,16 @@ interface SchoolRepository : JpaRepository<SchoolEntity, Int> {
     """
     )
     fun findAllResWithStudentCount(): List<SchoolRes>
+
+    @Query(
+        """
+            SELECT new com.ohayo.moyamoya.api.school.value.SchoolWaitingCountRes(
+                s.id,
+                s.name,
+                s.waitingCount
+            )
+            FROM SchoolEntity s
+        """
+    )
+    fun findAllWaitingCountRes(): List<SchoolWaitingCountRes>
 }

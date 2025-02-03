@@ -37,4 +37,11 @@ class SchoolEntity(
 
     @Column(nullable = false)
     val officeCode: String,
-): BaseEntity()
+
+    @Column(nullable = false)
+    var waitingCount: Long
+): BaseEntity() {
+    fun modifyWaitingCount(waitingCount: Long) {
+        this.waitingCount += waitingCount
+    }
+}
