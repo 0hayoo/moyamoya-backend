@@ -4,5 +4,4 @@ data class SchoolWaitingCountRes(
     val schoolId: Int,
     val name: String,
     val waitingCount: Long
-) {
-}
+)

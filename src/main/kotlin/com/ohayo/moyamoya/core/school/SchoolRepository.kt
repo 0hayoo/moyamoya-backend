@@ -41,6 +41,7 @@ interface SchoolRepository : JpaRepository<SchoolEntity, Int> {
                 s.waitingCount
             )
             FROM SchoolEntity s
+            ORDER BY s.waitingCount DESC
         """
     )
     fun findAllWaitingCountRes(): List<SchoolWaitingCountRes>

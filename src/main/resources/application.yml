@@ -45,7 +45,5 @@ cloud:
       auto: false
     region:
       static: ${S3_REGION}
-nonce:
-  key: ${NONCE_KEY}
 dev:
   secret-key: ${DEV_SECRET_KEY}
