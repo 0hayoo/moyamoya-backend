@@ -19,14 +19,14 @@ class SchoolService(
 
     fun getSchoolWaitingCount(): List<SchoolWaitingCountRes> = schoolRepository.findAllWaitingCountRes()
 
-    fun addSchoolWaitingCount(req: SchoolWaitingCountReq): VoidRes = VoidRes().apply {
+    fun addSchoolWaitingCount(req: SchoolWaitingCountReq): VoidRes {
         SchoolValidator.validateSchoolWaitingCount(req.waitCount)
 
-        schoolRepository.findByIdSafety(req.schoolId).apply {
+        val school = schoolRepository.findByIdSafety(req.schoolId).apply {
             modifyWaitingCount(req.waitCount)
-        }.let {
-            schoolRepository.save(it)
         }
-    }
+        schoolRepository.save(school)
 
+        return VoidRes()
+    }
 }

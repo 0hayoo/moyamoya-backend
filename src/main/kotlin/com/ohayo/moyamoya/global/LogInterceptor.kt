@@ -3,15 +3,16 @@ package com.ohayo.moyamoya.global
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import mu.KLogger
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
 
 
 @Component
-class LogInterceptor(
-    private val logger: KLogger
-) : HandlerInterceptor {
+class LogInterceptor : HandlerInterceptor {
+    companion object : KLogging()
+
     @Throws(Exception::class)
     override fun preHandle(
         request: HttpServletRequest,

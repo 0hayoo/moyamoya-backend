@@ -1,7 +1,6 @@
 package com.ohayo.moyamoya.global.config
 
 import com.ohayo.moyamoya.infra.discord.DiscordProperties
-import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,7 +21,4 @@ class GlobalConfig(
     fun neisRestClient() = RestClient.builder()
         .baseUrl("https://open.neis.go.kr")
         .build()
-
-    @Bean
-    fun logger() = KotlinLogging.logger { }
 }

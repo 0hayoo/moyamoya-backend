@@ -6,14 +6,15 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import jakarta.annotation.PostConstruct
 import mu.KLogger
+import mu.KLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 
 @Configuration
-class FirebaseConfig(
-    private val logger: KLogger,
-) {
+class FirebaseConfig {
+    companion object : KLogging()
+
     @PostConstruct
     fun init() {
         try {

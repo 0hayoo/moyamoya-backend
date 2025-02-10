@@ -39,54 +39,43 @@ class UserService(
         return VoidRes()
     }
 
-    @Transactional(rollbackFor = [Exception::class])
     fun verifyCode(req: VerifyCodeReq): VerifyCodeRes {
         val codes = phoneCodeRepository.findByStatusAndPhoneAndCode(
             status = PhoneCodeEntity.Status.UNUSED,
             phone = req.phone,
             code = req.code
         )
-
-        if (codes.isEmpty()) throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
+        if (codes.isEmpty()) {
+            throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
+        }
 
         codes.forEach { it.updateStatus() }
         phoneCodeRepository.saveAll(codes)
 
         val user = userRepository.findByPhone(req.phone)
-        return if (user == null) {
-            VerifyCodeRes(
-                isNewUser = true,
-                token = null
-            )
-        } else {
-            VerifyCodeRes(
-                isNewUser = false,
-                token = jwtClient.generate(user)
-            )
-        }
+        val token = user?.let(jwtClient::generate)
+        return VerifyCodeRes.of(token)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
     fun signUp(req: SignUpReq): Token {
-        if (userRepository.existsByPhone(req.phone)) throw CustomException(HttpStatus.BAD_REQUEST, "이미 가입된 계정")
+        if (userRepository.existsByPhone(req.phone)) {
+            throw CustomException(HttpStatus.BAD_REQUEST, "이미 가입된 계정")
+        }
 
         val codes = phoneCodeRepository.findByStatusAndPhoneAndCode(
             status = PhoneCodeEntity.Status.AUTHORIZED,
             phone = req.phone,
             code = req.code
         )
-
-        if (codes.isEmpty()) throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패")
-
-        codes.forEach {
-            it.updateStatus()
+        if (codes.isEmpty()) {
+            throw CustomException(HttpStatus.BAD_REQUEST, "인증 실패", 1)
         }
 
+        codes.forEach { it.updateStatus() }
         phoneCodeRepository.saveAll(codes)
 
         val school = schoolRepository.findByIdSafety(req.schoolId)
         val user = userRepository.save(req.toEntity(school))
-
         return jwtClient.generate(user)
     }
 

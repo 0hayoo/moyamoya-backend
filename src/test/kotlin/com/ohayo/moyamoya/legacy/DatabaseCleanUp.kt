@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.common
+package com.ohayo.moyamoya.legacy
 
 import jakarta.annotation.PostConstruct
 import jakarta.persistence.Entity
@@ -30,8 +30,6 @@ class DatabaseCleanUp {
                     .lowercase(Locale.getDefault())
             }
             .toList()
-        println(tableNames)
-        println(tableNamesWithAnnotation)
         tableNames.addAll(tableNamesWithAnnotation)
     }
 

@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.common
+package com.ohayo.moyamoya.legacy
 
 import com.ohayo.moyamoya.core.school.SchoolRepository
 import com.ohayo.moyamoya.core.user.UserRepository

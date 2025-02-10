@@ -3,6 +3,7 @@ package com.ohayo.moyamoya.global
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletResponse
 import mu.KLogger
+import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -10,9 +11,9 @@ import java.io.IOException
 
 @Component
 class ErrorResponseSender(
-    private val objectMapper: ObjectMapper,
-    private val logger: KLogger
+    private val objectMapper: ObjectMapper
 ) {
+    companion object : KLogging()
 
     fun send(response: HttpServletResponse, customException: CustomException) {
         println("customException: $customException")
@@ -31,6 +32,7 @@ class ErrorResponseSender(
                 objectMapper.writeValueAsString(
                     ErrorRes(
                         status = status.value(),
+                        code = 0,
                         message = message ?: status.reasonPhrase
                     )
                 )

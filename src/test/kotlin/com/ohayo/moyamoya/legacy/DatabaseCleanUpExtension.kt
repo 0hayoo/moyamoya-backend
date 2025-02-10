@@ -1,4 +1,4 @@
-package com.ohayo.moyamoya.common
+package com.ohayo.moyamoya.legacy
 
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext

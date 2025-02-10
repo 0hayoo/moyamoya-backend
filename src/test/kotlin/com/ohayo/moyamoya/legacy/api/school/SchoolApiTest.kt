@@ -1,6 +1,6 @@
-package com.ohayo.moyamoya.api
+package com.ohayo.moyamoya.legacy.api.school
 
-import com.ohayo.moyamoya.TestAnnotation
+import com.ohayo.moyamoya.MockMvcTest
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,7 +8,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
-@TestAnnotation
+@MockMvcTest
 class SchoolApiTest {
     @Autowired
     private lateinit var mvc: MockMvc

@@ -2,6 +2,7 @@ package com.ohayo.moyamoya.global
 
 import com.ohayo.moyamoya.infra.discord.DiscordErrorSendService
 import mu.KLogger
+import mu.KLogging
 import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,15 +14,17 @@ import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @RestControllerAdvice
 class CustomExceptionHandler(
-    private val logger: KLogger,
     private val environment: Environment,
     private val discordErrorSendService: DiscordErrorSendService
 ) {
+    companion object : KLogging()
+
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(exception: CustomException): ResponseEntity<ErrorRes> {
         logger.error("CustomExceptionHandler.CustomException", exception)
         return createErrorResponse(
             status = exception.status,
+            code = exception.code,
             message = exception.message
         )
     }
@@ -60,11 +63,12 @@ class CustomExceptionHandler(
 
     private fun createErrorResponse(
         status: HttpStatus,
+        code: Int = 0,
         message: String,
     ) = ResponseEntity.status(status).body(
-
         ErrorRes(
             status = status.value(),
+            code = code,
             message = message
         )
     )
