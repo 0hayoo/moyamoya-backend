@@ -14,11 +14,16 @@ import javax.crypto.spec.SecretKeySpec
 class JwtClient(
     private val jwtProperties: JwtProperties,
 ) {
-    fun payload(key: JwtPayloadKey, claims: Jws<Claims>) =
-        claims.payload.get(key.key, String::class.java) ?: throw CustomException(
-            HttpStatus.UNAUTHORIZED,
-            "invalid token"
+    fun generate(user: UserEntity) = Token(
+        accessToken = createToken(
+            user = user,
+            tokenExpired = jwtProperties.expired.access,
+        ),
+        refreshToken = createToken(
+            user = user,
+            tokenExpired = jwtProperties.expired.refresh,
         )
+    )
 
     fun payload(key: JwtPayloadKey, token: String): String =
         payload(key, parseToken(token))
@@ -39,17 +44,10 @@ class JwtClient(
         } catch (e: Exception) {
             throw CustomException(HttpStatus.UNAUTHORIZED, "invalid token")
         }
-
-    fun generate(user: UserEntity) = Token(
-        accessToken = createToken(
-            user = user,
-            tokenExpired = jwtProperties.expired.access,
-        ),
-        refreshToken = createToken(
-            user = user,
-            tokenExpired = jwtProperties.expired.refresh,
-        )
-    )
+    
+    private fun payload(key: JwtPayloadKey, claims: Jws<Claims>) =
+        claims.payload.get(key.key, String::class.java)
+            ?: throw CustomException(HttpStatus.UNAUTHORIZED, "invalid token")
 
     private fun createToken(user: UserEntity, tokenExpired: Long) =
         Jwts.builder()
